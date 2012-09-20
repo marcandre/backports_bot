@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'thor'
+require 'backports'
+
+require_relative '../lib/paths'
+require_relative '../lib/configuration'
+
+class StickyFlag < Thor
+  include Thor::Actions
+  def initialize(*args)
+    super
+    
+    Configuration.load!
+  end
+
+  desc 'config', "display and set configuration parameters"
+  long_desc <<-LONGDESC
+    `stickyflag config` allows you to set persistent configuration parameters
+    for StickyFlag.
+    
+    With only -k <key> specified, display the current value for the given key.
+    
+    With -k <key> <value>, set the value for the key.
+    
+    With the --list option, list all available configuration parameters and 
+    their current values.
+  LONGDESC
+  method_option :key, :aliases => '-k', :required => false,
+    :desc => 'the configuration key to set', :type => :string
+  method_option :list, :aliases => '-l', :default => false, :required => false,
+    :desc => 'list all available configuration options', :type => :boolean
+  method_option :reset, :default => false, :required => false,
+    :desc => 'reset *all* configuration settings to defaults', :type => :boolean
+  def config(value = nil)
+    if options.reset?
+      Configuration.reset!
+      return
+    end
+    
+    if options.list? || options[:key] == nil
+      Configuration.dump
+      return
+    end
+    
+    if value.nil?
+      value = Configuration.get(options[:key])
+      puts "`#{options[:key]}`: `#{value}`"
+      return
+    end
+    
+    Configuration.set(options[:key], value)
+    puts "`#{options[:key]}` set to `#{value}`"
+    
+    Configuration.save!
+  end
+end
+
+StickyFlag.start

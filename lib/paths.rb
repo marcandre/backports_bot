@@ -1,4 +1,5 @@
 require 'rbconfig'
+require 'fileutils'
 
 class Paths
   def self.config
@@ -14,6 +15,7 @@ class Paths
       root_dir = File.expand_path('~/.stickyflag')
     end
     
+    FileUtils.mkdir_p root_dir
     File.join(root_dir, 'config.yml')
   end
   
@@ -30,6 +32,7 @@ class Paths
       root_dir = File.expand_path('~/.stickyflag')
     end
     
+    FileUtils.mkdir_p root_dir
     File.join(root_dir, 'db.sqlite')
   end
 end
