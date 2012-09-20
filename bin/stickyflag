@@ -8,8 +8,16 @@ require_relative '../lib/configuration'
 
 class StickyFlag < Thor
   include Thor::Actions
+  
+  class_option :color, :required => false, :default => true,
+    :desc => 'if true, print our status messages in color', :type => :boolean
+  
   def initialize(*args)
     super
+    
+    if options.color?
+      shell = Thor::Shell::Color.new
+    end
     
     Configuration.load!
   end
