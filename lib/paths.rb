@@ -1,8 +1,8 @@
 require 'rbconfig'
 require 'fileutils'
 
-class Paths
-  def self.config
+module Paths
+  def config_path
     case RbConfig::CONFIG['target_os']
     when /darwin/i
       root_dir = File.expand_path("~/Library/Application Support/StickyFlag")
@@ -14,12 +14,12 @@ class Paths
     else
       root_dir = File.expand_path('~/.stickyflag')
     end
-    
+      
     FileUtils.mkdir_p root_dir
     File.join(root_dir, 'config.yml')
   end
   
-  def self.data
+  def data_path
     case RbConfig::CONFIG['target_os']
     when /darwin/i
       root_dir = File.expand_path("~/Library/Application Support/StickyFlag")
