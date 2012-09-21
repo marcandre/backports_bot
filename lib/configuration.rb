@@ -12,7 +12,7 @@ module Configuration
   
   def get_config(key)
     unless @@configuration.keys.include?(key.to_sym)
-      raise Thor::Error('stickyflag config: invalid configuration key') 
+      raise Thor::Error.new('stickyflag config: invalid configuration key') 
     end
     
     @@configuration[key.to_sym]
@@ -20,7 +20,7 @@ module Configuration
   
   def set_config(key, value)
     unless @@configuration.keys.include?(key.to_sym)
-      raise Thor::Error('stickyflag config: invalid configuration key')
+      raise Thor::Error.new('stickyflag config: invalid configuration key')
     end
     
     @@configuration[key.to_sym] = value

@@ -7,6 +7,8 @@ require_relative '../lib/paths'
 require_relative '../lib/configuration'
 require_relative '../lib/external_cmds'
 
+require_relative '../lib/tags/pdf'
+
 class StickyFlag < Thor
   include Thor::Actions
   class_option :color, :required => false, :default => true,
@@ -66,6 +68,41 @@ class StickyFlag < Thor
     puts "'#{options[:key]}' set to '#{value}'"
     
     save_config!
+  end
+  
+  # FIXME: don't allow tags with a comma!
+  
+  desc 'show [FILES]', "show the tags set for a set of files"
+  long_desc <<-LONGDESC
+    `stickyflag show` lets you look at the tags that have been applied to
+    a file or set of files.
+  LONGDESC
+  def show(*files)
+    if files.empty?
+      raise Thor::Error.new("stickyflag show requires at least 1 argument: \"stickyflag show [FILES]\"")
+    end
+    
+    files.each do |file_name|
+      unless File.file? file_name
+        say_status :error, "File #{file_name} does not exist", :red
+        next
+      end
+      
+      puts Tags::PDF.get(file_name, get_config(:pdftk_path)).inspect
+    end
+  end
+  
+  
+  desc 'set [FILE] [TAG]', "set a tag for a file"
+  long_desc <<-LONGDESC
+  LONGDESC
+  def set(file_name, tag)
+    unless File.file? file_name
+      say_status :error, "File #{file_name} does not exist", :red
+      return
+    end
+    
+    Tags::PDF.set(file_name, tag, get_config(:pdftk_path))
   end
 end
 
