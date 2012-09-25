@@ -43,7 +43,62 @@ module Tags
         out.close
         begin
           unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', out.path
-            raise Thor::Error.new("ERROR: Failed to set tags for #{file_name}; pdftk call failed")
+            raise Thor::Error.new("ERROR: Failed to set tag for #{file_name}; pdftk call failed")
+            return
+          end
+          
+          FileUtils.mv out.path, file_name
+        ensure
+          out.unlink
+        end
+      ensure
+        info.unlink
+      end
+    end
+
+    def self.unset(file_name, tag, pdftk_path = 'pdftk')
+      tags = get(file_name, pdftk_path)
+      unless tags.include? tag
+        raise Thor::Error.new("ERROR: Cannot unset tag #{tag} from file, not set")
+        return
+      end
+      tags.delete(tag)
+      
+      info = Tempfile.new(['sfpdftag', '.txt'])
+      begin
+        info.write("InfoKey: X-StickyFlag-Flags\n")
+        info.write("InfoValue: #{tags.join(', ')}\n")
+        info.close
+        
+        out = Tempfile.new(['sfpdfout', '.pdf'])
+        out.close
+        begin
+          unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', out.path
+            raise Thor::Error.new("ERROR: Failed to unset tag for #{file_name}; pdftk call failed")
+            return
+          end
+          
+          FileUtils.mv out.path, file_name
+        ensure
+          out.unlink
+        end
+      ensure
+        info.unlink
+      end
+    end
+
+    def self.clear(file_name, pdftk_path = 'pdftk')
+      info = Tempfile.new(['sfpdftag', '.txt'])
+      begin
+        info.write("InfoKey: X-StickyFlag-Flags\n")
+        info.write("InfoValue: \n")
+        info.close
+        
+        out = Tempfile.new(['sfpdfout', '.pdf'])
+        out.close
+        begin
+          unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', out.path
+            raise Thor::Error.new("ERROR: Failed to clear tags for #{file_name}; pdftk call failed")
             return
           end
           

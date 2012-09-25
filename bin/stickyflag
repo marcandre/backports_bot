@@ -113,6 +113,41 @@ class StickyFlag < Thor
     end
     
     set_tag_for path, tag
+    
+    tags = get_tags_for path
+    say_status :success, "New tags for #{file_name}: #{tags.join(', ')}"
+  end
+  
+  
+  desc 'unset [FILE] [TAG]', "remove a tag from a file"
+  long_desc <<-LONGDESC
+  LONGDESC
+  def unset(file_name, tag)
+    path = Pathname.new(file_name)
+    unless path.file?
+      say_status :error, "File #{file_name} does not exist", :red
+      return
+    end
+    
+    unset_tag_for path, tag
+    
+    tags = get_tags_for path
+    say_status :success, "New tags for #{file_name}: #{tags.join(', ')}"
+  end
+  
+  
+  desc 'clear [FILE]', "remove all tags from a file"
+  long_desc <<-LONGDESC
+  LONGDESC
+  def clear(file_name)
+    path = Pathname.new(file_name)
+    unless path.file?
+      say_status :error, "File #{file_name} does not exist", :red
+      return
+    end
+    
+    clear_tags_for path
+    say_status :success, "Tags cleared for file #{file_name}"
   end
 end
 
