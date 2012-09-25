@@ -7,7 +7,7 @@ require_relative '../lib/paths'
 require_relative '../lib/configuration'
 require_relative '../lib/external_cmds'
 
-require_relative '../lib/tags/pdf'
+require_relative '../lib/tag_factory'
 
 class StickyFlag < Thor
   include Thor::Actions
@@ -17,6 +17,7 @@ class StickyFlag < Thor
   include Paths
   include Configuration
   include ExternalCmds
+  include TagFactory
 
   def initialize(*args)
     super
@@ -83,12 +84,20 @@ class StickyFlag < Thor
     end
     
     files.each do |file_name|
-      unless File.file? file_name
+      path = Pathname.new(file_name)
+      unless path.file?
         say_status :error, "File #{file_name} does not exist", :red
         next
       end
       
-      puts Tags::PDF.get(file_name, get_config(:pdftk_path)).inspect
+      tags = get_tags_for path
+      if tags.empty?
+        say "#{file_name}: no tags"
+        next
+      else
+        say "#{file_name}: #{tags.join(', ')}"
+        next
+      end
     end
   end
   
@@ -97,12 +106,13 @@ class StickyFlag < Thor
   long_desc <<-LONGDESC
   LONGDESC
   def set(file_name, tag)
-    unless File.file? file_name
+    path = Pathname.new(file_name)
+    unless path.file?
       say_status :error, "File #{file_name} does not exist", :red
       return
     end
     
-    Tags::PDF.set(file_name, tag, get_config(:pdftk_path))
+    set_tag_for path, tag
   end
 end
 

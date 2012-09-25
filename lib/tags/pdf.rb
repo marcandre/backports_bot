@@ -5,7 +5,7 @@ require 'tempfile'
 module Tags
   module PDF
     def self.get(file_name, pdftk_path = 'pdftk')
-      stdout_str, stderr_str, status = Open3.capture3(pdftk_path, file_name, 'dump_data_utf8')
+      stdout_str, stderr_str, status = Open3.capture3(pdftk_path, file_name.to_s, 'dump_data_utf8')
       unless status.success?
         raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
         return
@@ -42,7 +42,7 @@ module Tags
         out = Tempfile.new(['sfpdfout', '.pdf'])
         out.close
         begin
-          unless system pdftk_path, file_name, 'update_info', info.path, 'output', out.path
+          unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', out.path
             raise Thor::Error.new("ERROR: Failed to set tags for #{file_name}; pdftk call failed")
             return
           end
