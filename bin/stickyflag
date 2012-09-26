@@ -42,9 +42,9 @@ class StickyFlag < Thor
     With the --list option, list all available configuration parameters and 
     their current values.
   LONGDESC
-  method_option :key, :aliases => '-k', :required => false,
+  method_option :key, :aliases => :k, :required => false,
     :desc => 'the configuration key to set', :type => :string
-  method_option :list, :aliases => '-l', :default => false, :required => false,
+  method_option :list, :aliases => :l, :default => false, :required => false,
     :desc => 'list all available configuration options', :type => :boolean
   method_option :reset, :default => false, :required => false,
     :desc => 'reset *all* configuration settings to defaults', :type => :boolean
@@ -70,8 +70,6 @@ class StickyFlag < Thor
     
     save_config!
   end
-  
-  # FIXME: don't allow tags with a comma!
   
   desc 'show [FILES]', "show the tags set for a set of files"
   long_desc <<-LONGDESC
@@ -106,6 +104,8 @@ class StickyFlag < Thor
   long_desc <<-LONGDESC
   LONGDESC
   def set(file_name, tag)
+    check_tag tag
+    
     path = Pathname.new(file_name)
     unless path.file?
       say_status :error, "File #{file_name} does not exist", :red
@@ -123,6 +123,8 @@ class StickyFlag < Thor
   long_desc <<-LONGDESC
   LONGDESC
   def unset(file_name, tag)
+    check_tag tag
+    
     path = Pathname.new(file_name)
     unless path.file?
       say_status :error, "File #{file_name} does not exist", :red
@@ -148,6 +150,17 @@ class StickyFlag < Thor
     
     clear_tags_for path
     say_status :success, "Tags cleared for file #{file_name}"
+  end
+  
+  private
+  
+  def check_tag(tag)
+    if tag.include? ','
+      raise Thor::Error.new("ERROR: Tag names cannot include a comma.")
+    end
+    if tag.empty?
+      raise Thor::Error.new("ERROR: Cannot set an empty tag.")
+    end
   end
 end
 
