@@ -8,7 +8,7 @@ module TagFactory
     extension = file_name.extname
     case extension
     when '.pdf' then return Tags::PDF::get(file_name, get_config(:pdftk_path))
-    else raise Thor::Error.new("Don't know how to get tags for a file of extension '#{extension}'")
+    else raise Thor::Error.new("ERROR: Don't know how to get tags for a file of extension '#{extension}'")
     end
   end
   
@@ -16,7 +16,7 @@ module TagFactory
     extension = file_name.extname
     case extension
     when '.pdf' then return Tags::PDF::set(file_name, tag, get_config(:pdftk_path))
-    else raise Thor::Error.new("Don't know how to set tags for a file of extension '#{extension}'")
+    else raise Thor::Error.new("ERROR: Don't know how to set tags for a file of extension '#{extension}'")
     end
   end
   
@@ -24,7 +24,7 @@ module TagFactory
     extension = file_name.extname
     case extension
     when '.pdf' then return Tags::PDF::unset(file_name, tag, get_config(:pdftk_path))
-    else raise Thor::Error.new("Don't know how to unset tags for a file of extension '#{extension}'")
+    else raise Thor::Error.new("ERROR: Don't know how to unset tags for a file of extension '#{extension}'")
     end
   end
   
@@ -32,7 +32,7 @@ module TagFactory
     extension = file_name.extname
     case extension
     when '.pdf' then return Tags::PDF::clear(file_name, get_config(:pdftk_path))
-    else raise Thor::Error.new("Don't know how to clear all tags for a file of extension '#{extension}'")
+    else raise Thor::Error.new("ERROR: Don't know how to clear all tags for a file of extension '#{extension}'")
     end
   end
 end
