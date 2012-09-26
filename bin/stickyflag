@@ -102,6 +102,9 @@ class StickyFlag < Thor
   
   desc 'set [FILE] [TAG]', "set a tag for a file"
   long_desc <<-LONGDESC
+    `stickyflag set` lets you add one particular tag to the tags present in a
+    given file.  Specify the file you want to modify, and the tag you want to
+    add.
   LONGDESC
   def set(file_name, tag)
     check_tag tag
@@ -121,6 +124,9 @@ class StickyFlag < Thor
   
   desc 'unset [FILE] [TAG]', "remove a tag from a file"
   long_desc <<-LONGDESC
+    `stickyflag unset` lets you delete one tag from the tags present in a file.
+    Specify the file you want to modify, and the tag you want to remove.  This
+    action will fail if the tag is not set in the requested file.
   LONGDESC
   def unset(file_name, tag)
     check_tag tag
@@ -138,18 +144,26 @@ class StickyFlag < Thor
   end
   
   
-  desc 'clear [FILE]', "remove all tags from a file"
+  desc 'clear [FILES]', "remove all tags from a set of files"
   long_desc <<-LONGDESC
+    `stickyflag clear` removes all tags that have been applied to the given 
+    list of files.
   LONGDESC
-  def clear(file_name)
-    path = Pathname.new(file_name)
-    unless path.file?
-      say_status :error, "File #{file_name} does not exist", :red
-      return
+  def clear(*files)
+    if files.empty?
+      raise Thor::Error.new("stickyflag clear requires at least 1 argument: \"stickyflag clear [FILES]\"")
     end
     
-    clear_tags_for path
-    say_status :success, "Tags cleared for file #{file_name}"
+    files.each do |file_name|
+      path = Pathname.new(file_name)
+      unless path.file?
+        say_status :error, "File #{file_name} does not exist", :red
+        return
+      end
+      
+      clear_tags_for path
+      say_status :success, "Tags cleared for #{file_name}"
+    end
   end
   
   private

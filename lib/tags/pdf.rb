@@ -58,10 +58,6 @@ module Tags
 
     def self.unset(file_name, tag, pdftk_path = 'pdftk')
       tags = get(file_name, pdftk_path)
-      unless tags.include? tag
-        raise Thor::Error.new("ERROR: Cannot unset tag #{tag} from file, not set")
-        return
-      end
       tags.delete(tag)
       
       info = Tempfile.new(['sfpdftag', '.txt'])

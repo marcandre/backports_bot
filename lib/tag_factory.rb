@@ -13,6 +13,12 @@ module TagFactory
   end
   
   def set_tag_for(file_name, tag)
+    tags = get_tags_for file_name
+    if tags.include? tag
+      # Already set
+      return
+    end
+    
     extension = file_name.extname
     case extension
     when '.pdf' then return Tags::PDF::set(file_name, tag, get_config(:pdftk_path))
@@ -21,6 +27,12 @@ module TagFactory
   end
   
   def unset_tag_for(file_name, tag)
+    tags = get_tags_for file_name
+    unless tags.include? tag
+      raise Thor::Error.new("ERROR: Cannot unset tag #{tag} from file, not set")
+      return
+    end
+    
     extension = file_name.extname
     case extension
     when '.pdf' then return Tags::PDF::unset(file_name, tag, get_config(:pdftk_path))
