@@ -13,9 +13,9 @@ class StickyFlag < Thor
   include Thor::Actions
   class_option :color, :required => false, :default => true,
     :desc => 'if true, print our status messages in color', :type => :boolean
-  class_option :force, :requires => false, :default => false, :aliases => :f,
+  class_option :force, :requires => false, :default => false, :aliases => '-f',
     :desc => 'do not print diagnostic messages for missing files or empty tags on multiple-file operations'
-  class_option :quiet, :required => false, :default => false, :aliases => :q,
+  class_option :quiet, :required => false, :default => false, :aliases => '-q',
     :desc => 'if true, print only essential output to the console (skip empty tags, diagnostics)'
 
   include Paths
@@ -46,9 +46,9 @@ class StickyFlag < Thor
     With the --list option, list all available configuration parameters and 
     their current values.
   LONGDESC
-  method_option :key, :aliases => :k, :required => false,
+  method_option :key, :aliases => '-k', :required => false,
     :desc => 'the configuration key to set', :type => :string
-  method_option :list, :aliases => :l, :default => false, :required => false,
+  method_option :list, :aliases => '-l', :default => false, :required => false,
     :desc => 'list all available configuration options', :type => :boolean
   method_option :reset, :default => false, :required => false,
     :desc => 'reset *all* configuration settings to defaults', :type => :boolean
