@@ -13,6 +13,10 @@ class StickyFlag < Thor
   include Thor::Actions
   class_option :color, :required => false, :default => true,
     :desc => 'if true, print our status messages in color', :type => :boolean
+  class_option :force, :requires => false, :default => false, :aliases => :f,
+    :desc => 'do not print diagnostic messages for missing files or empty tags on multiple-file operations'
+  class_option :quiet, :required => false, :default => false, :aliases => :q,
+    :desc => 'if true, print only essential output to the console (skip empty tags, diagnostics)'
 
   include Paths
   include Configuration
@@ -61,12 +65,12 @@ class StickyFlag < Thor
     
     if value.nil?
       value = get_config options[:key]
-      puts "#{options[:key]}: '#{value}'"
+      say "#{options[:key]}: '#{value}'"
       return
     end
     
     set_config options[:key], value
-    puts "'#{options[:key]}' set to '#{value}'"
+    say "'#{options[:key]}' set to '#{value}'" unless options.quiet?
     
     save_config!
   end
@@ -84,13 +88,13 @@ class StickyFlag < Thor
     files.each do |file_name|
       path = Pathname.new(file_name)
       unless path.file?
-        say_status :error, "File #{file_name} does not exist", :red
+        say_status :error, "File #{file_name} does not exist", :red unless options.force? || options.quiet?
         next
       end
       
       tags = get_tags_for path
       if tags.empty?
-        say "#{file_name}: no tags"
+        say "#{file_name}: no tags" unless options.force? || options.quiet?
         next
       else
         say "#{file_name}: #{tags.join(', ')}"
@@ -111,14 +115,14 @@ class StickyFlag < Thor
     
     path = Pathname.new(file_name)
     unless path.file?
-      say_status :error, "File #{file_name} does not exist", :red
-      return
+      say_status :error, "File #{file_name} does not exist", :red unless options.quiet?
+      exit 1
     end
     
     set_tag_for path, tag
     
     tags = get_tags_for path
-    say_status :success, "New tags for #{file_name}: #{tags.join(', ')}"
+    say_status :success, "New tags for #{file_name}: #{tags.join(', ')}" unless options.quiet?
   end
   
   
@@ -133,14 +137,14 @@ class StickyFlag < Thor
     
     path = Pathname.new(file_name)
     unless path.file?
-      say_status :error, "File #{file_name} does not exist", :red
-      return
+      say_status :error, "File #{file_name} does not exist", :red unless options.quiet?
+      exit 1
     end
     
     unset_tag_for path, tag
     
     tags = get_tags_for path
-    say_status :success, "New tags for #{file_name}: #{tags.join(', ')}"
+    say_status :success, "New tags for #{file_name}: #{tags.join(', ')}" unless options.quiet?
   end
   
   
@@ -157,12 +161,12 @@ class StickyFlag < Thor
     files.each do |file_name|
       path = Pathname.new(file_name)
       unless path.file?
-        say_status :error, "File #{file_name} does not exist", :red
+        say_status :error, "File #{file_name} does not exist", :red unless options.force? || options.quiet?
         return
       end
       
       clear_tags_for path
-      say_status :success, "Tags cleared for #{file_name}"
+      say_status :success, "Tags cleared for #{file_name}" unless options.quiet?
     end
   end
   

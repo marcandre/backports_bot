@@ -14,7 +14,7 @@ module ExternalCmds
       # below.
       unless path.nil? || path.empty?
         unless File.executable? path
-          say_status :error, "Path set for #{cmd} is invalid", :red
+          say_status :error, "Path set for #{cmd} is invalid", :red unless options.quiet?
 
           path = ''
           set_config "#{cmd}_path", ''
@@ -29,7 +29,7 @@ module ExternalCmds
         # We don't have a path for this command, see if we can find it
         found = which(cmd)
         if found.nil?
-          say_status :warning, "Cannot find #{cmd} in path, will not be able to #{desc}", :yellow
+          say_status :warning, "Cannot find #{cmd} in path, will not be able to #{desc}", :yellow unless options.quiet?
           set_config "have_#{cmd}", false
           next
         end

@@ -36,9 +36,11 @@ module Configuration
   end
   
   def dump_config
-    puts "StickyFlag Configuration:"
+    return if options.quiet?
+    
+    say "StickyFlag Configuration:"
     @@configuration.each do |key, val|
-      puts "  #{key}: '#{val}'"
+      say "  #{key}: '#{val}'"
     end
   end
   
