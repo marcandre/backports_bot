@@ -8,26 +8,28 @@ module Configuration
     :pdftk_path => ''
   }
   
-  @@configuration = DEFAULT_CONFIG.clone
-  
   def get_config(key)
-    unless @@configuration.keys.include?(key.to_sym)
+    @configuration ||= DEFAULT_CONFIG.clone
+  
+    unless @configuration.keys.include?(key.to_sym)
       raise Thor::Error.new('ERROR: Invalid configuration key') 
     end
     
-    @@configuration[key.to_sym]
+    @configuration[key.to_sym]
   end
   
   def set_config(key, value)
-    unless @@configuration.keys.include?(key.to_sym)
+    @configuration ||= DEFAULT_CONFIG.clone
+  
+    unless @configuration.keys.include?(key.to_sym)
       raise Thor::Error.new('ERROR: invalid configuration key')
     end
     
-    @@configuration[key.to_sym] = value
+    @configuration[key.to_sym] = value
   end
   
   def reset_config!
-    @@configuration = DEFAULT_CONFIG.clone
+    @configuration = DEFAULT_CONFIG.clone
     
     file_name = config_path
     if File.file? file_name
@@ -36,10 +38,12 @@ module Configuration
   end
   
   def dump_config
+    @configuration ||= DEFAULT_CONFIG.clone
+  
     return if options.quiet?
     
     say "StickyFlag Configuration:"
-    @@configuration.each do |key, val|
+    @configuration.each do |key, val|
       say "  #{key}: '#{val}'"
     end
   end
@@ -47,14 +51,16 @@ module Configuration
   def load_config!
     file_name = config_path
     if File.file? file_name
-      @@configuration = YAML::load(File.open(file_name))
+      @configuration = YAML::load(File.open(file_name))
     end
   end
   
   def save_config!
+    @configuration ||= DEFAULT_CONFIG.clone
+  
     file_name = config_path
     File.open(file_name, 'w') do |f|
-      YAML.dump(@@configuration, f)
+      YAML.dump(@configuration, f)
     end
   end
 end
