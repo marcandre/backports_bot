@@ -7,4 +7,7 @@ if RbConfig::CONFIG['target_os'] =~ /linux/i
   gem 'xdg'
 end
 
+gem 'chunky_png', :require => false
+gem 'oily_png'
+
 gem 'rspec'
