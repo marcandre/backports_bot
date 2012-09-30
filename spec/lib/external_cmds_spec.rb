@@ -1,3 +1,4 @@
+require 'tmpdir'
 require 'thor'
 require_relative '../../lib/paths'
 require_relative '../../lib/configuration'
@@ -12,9 +13,9 @@ end
 describe 'ExternalCmds' do
   # We want to handle the path manually here
   def add_to_path(file_name)
-    ENV['PATH'] = File.dirname(__FILE__)
+    ENV['PATH'] = Dir.tmpdir
     
-    path = File.join(File.dirname(__FILE__), file_name)
+    path = File.join(Dir.tmpdir, file_name)
     File.open(path, 'w') { |f| f.write('test') }
     File.chmod(0755, path)
     
@@ -68,7 +69,7 @@ describe 'ExternalCmds' do
       it 'sets the right pdftk path' do
         @obj.find_external_cmds
         
-        path = File.expand_path(File.join(File.dirname(__FILE__), 'pdftk'))
+        path = File.expand_path(File.join(Dir.tmpdir, 'pdftk'))
         @obj.get_config(:pdftk_path).should eq(path)
       end
       
@@ -130,7 +131,7 @@ describe 'ExternalCmds' do
     describe 'with configuration set, with pdftk' do
       before(:each) do
         @obj = ExternalCmdsTester.new
-        @obj.set_config :pdftk_path, File.expand_path(File.join(File.dirname(__FILE__), 'pdftk'))
+        @obj.set_config :pdftk_path, File.expand_path(File.join(Dir.tmpdir, 'pdftk'))
         @obj.set_config :have_pdftk, true
         
         add_to_path('pdftk')
@@ -144,7 +145,7 @@ describe 'ExternalCmds' do
       it 'leaves the right pdftk path' do
         @obj.find_external_cmds
         
-        path = File.expand_path(File.join(File.dirname(__FILE__), 'pdftk'))
+        path = File.expand_path(File.join(Dir.tmpdir, 'pdftk'))
         @obj.get_config(:pdftk_path).should eq(path)
       end
       
