@@ -1,5 +1,6 @@
 require 'thor'
 require 'oily_png'
+require 'fileutils'
 
 module Tags
   module PNG
@@ -20,7 +21,10 @@ module Tags
       
       image = ChunkyPNG::Image.from_file(file_name)
       image.metadata['X-StickyFlag-Flags'] = tags.join(', ')
-      image.save(file_name)
+      
+      outpath = File.tmpnam('.png')
+      image.save(outpath)
+      FileUtils.mv(outpath, file_name)
     end
     
     def unset(file_name, tag)
@@ -31,13 +35,19 @@ module Tags
       
       image = ChunkyPNG::Image.from_file(file_name)
       image.metadata['X-StickyFlag-Flags'] = tags.join(', ')
-      image.save(file_name)
+      
+      outpath = File.tmpnam('.png')
+      image.save(outpath)
+      FileUtils.mv(outpath, file_name)
     end
     
     def clear(file_name)
       image = ChunkyPNG::Image.from_file(file_name)
       image.metadata.delete('X-StickyFlag-Flags')
-      image.save(file_name)
+      
+      outpath = File.tmpnam('.png')
+      image.save(outpath)
+      FileUtils.mv(outpath, file_name)
     end
   end
 end

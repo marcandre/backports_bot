@@ -43,18 +43,13 @@ module Tags
         info.write("InfoValue: #{tags.join(', ')}\n")
         info.close
         
-        out = Tempfile.new(['sfpdfout', '.pdf'])
-        out.close
-        begin
-          unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', out.path
-            raise Thor::Error.new("ERROR: Failed to set tag for #{file_name}; pdftk call failed")
-            return
-          end
-          
-          FileUtils.mv out.path, file_name
-        ensure
-          out.unlink
+        outpath = File.tmpnam('.pdf')
+        unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath
+          raise Thor::Error.new("ERROR: Failed to set tag for #{file_name}; pdftk call failed")
+          return
         end
+          
+        FileUtils.mv outpath, file_name
       ensure
         info.unlink
       end
@@ -72,18 +67,13 @@ module Tags
         info.write("InfoValue: #{tags.join(', ')}\n")
         info.close
         
-        out = Tempfile.new(['sfpdfout', '.pdf'])
-        out.close
-        begin
-          unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', out.path
-            raise Thor::Error.new("ERROR: Failed to unset tag for #{file_name}; pdftk call failed")
-            return
-          end
-          
-          FileUtils.mv out.path, file_name
-        ensure
-          out.unlink
+        outpath = File.tmpnam('.pdf')
+        unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath
+          raise Thor::Error.new("ERROR: Failed to unset tag for #{file_name}; pdftk call failed")
+          return
         end
+          
+        FileUtils.mv outpath, file_name
       ensure
         info.unlink
       end
@@ -96,18 +86,13 @@ module Tags
         info.write("InfoValue: \n")
         info.close
         
-        out = Tempfile.new(['sfpdfout', '.pdf'])
-        out.close
-        begin
-          unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', out.path
-            raise Thor::Error.new("ERROR: Failed to clear tags for #{file_name}; pdftk call failed")
-            return
-          end
-          
-          FileUtils.mv out.path, file_name
-        ensure
-          out.unlink
+        outpath = File.tmpnam('.pdf')
+        unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath
+          raise Thor::Error.new("ERROR: Failed to clear tags for #{file_name}; pdftk call failed")
+          return
         end
+          
+        FileUtils.mv outpath, file_name
       ensure
         info.unlink
       end

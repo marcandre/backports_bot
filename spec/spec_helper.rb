@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rspec/autorun'
 require 'thor'
+require_relative '../lib/tmpnam'
 require_relative '../lib/configuration'
 
 Dir['./spec/support/**/*.rb'].map { |f| require f }

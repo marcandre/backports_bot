@@ -3,7 +3,7 @@ shared_examples_for 'a tag handler' do
   let(:params) { [] }
   
   def file_extension
-    described_class.to_s[-3..-1].downcase
+    described_class.to_s.gsub('Tags::', '').downcase
   end
   
   def example_with_tag
