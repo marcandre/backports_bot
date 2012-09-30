@@ -4,7 +4,9 @@ require 'tempfile'
 
 module Tags
   module PDF
-    def self.get(file_name, pdftk_path = 'pdftk')
+    module_function
+    
+    def get(file_name, pdftk_path = 'pdftk')
       stdout_str, stderr_str, status = Open3.capture3(pdftk_path, file_name.to_s, 'dump_data_utf8')
       unless status.success?
         raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
@@ -29,8 +31,10 @@ module Tags
       tags
     end
     
-    def self.set(file_name, tag, pdftk_path = 'pdftk')
+    def set(file_name, tag, pdftk_path = 'pdftk')
       tags = get(file_name, pdftk_path)
+      return if tags.include? tag
+      
       tags << tag
       
       info = Tempfile.new(['sfpdftag', '.txt'])
@@ -56,8 +60,10 @@ module Tags
       end
     end
 
-    def self.unset(file_name, tag, pdftk_path = 'pdftk')
+    def unset(file_name, tag, pdftk_path = 'pdftk')
       tags = get(file_name, pdftk_path)
+      return unless tags.include? tag
+      
       tags.delete(tag)
       
       info = Tempfile.new(['sfpdftag', '.txt'])
@@ -83,7 +89,7 @@ module Tags
       end
     end
 
-    def self.clear(file_name, pdftk_path = 'pdftk')
+    def clear(file_name, pdftk_path = 'pdftk')
       info = Tempfile.new(['sfpdftag', '.txt'])
       begin
         info.write("InfoKey: X-StickyFlag-Flags\n")
