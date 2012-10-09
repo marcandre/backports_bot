@@ -7,6 +7,8 @@ if RbConfig::CONFIG['target_os'] =~ /linux/i
   gem 'xdg'
 end
 
+gem 'sqlite3'
+
 gem 'chunky_png'
 gem 'oily_png'
 
