@@ -19,7 +19,7 @@ module Paths
     File.join(root_dir, 'config.yml')
   end
   
-  def data_path
+  def database_path
     case RbConfig::CONFIG['target_os']
     when /darwin/i
       root_dir = File.expand_path("~/Library/Application Support/StickyFlag")
