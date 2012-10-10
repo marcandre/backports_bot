@@ -5,7 +5,8 @@ require 'rubygems'
 require 'backports'
 require 'rspec/autorun'
 require 'thor'
-require_relative '../lib/tmpnam'
+require_relative '../lib/patches/tmpnam'
+require_relative '../lib/patches/tempfile_encoding'
 
 Dir['./spec/support/**/*.rb'].map { |f| require f }
 

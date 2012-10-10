@@ -1,4 +1,3 @@
-require_relative '../../lib/tempfile_encoding'
 
 describe 'Tempfile' do
   describe '.new_with_encoding' do

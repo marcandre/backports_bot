@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'thor'
 require 'open3'
-require_relative '../tempfile_encoding'
+require_relative '../patches/tempfile_encoding'
 
 module Tags
   module PDF
