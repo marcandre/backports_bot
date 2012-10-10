@@ -7,8 +7,18 @@ module Tags
     module_function
     
     def get(file_name, pdftk_path = 'pdftk')
-      stdout_str, stderr_str, status = Open3.capture3(pdftk_path, file_name.to_s, 'dump_data_utf8')
-      unless status.success?
+      stdout_str = ''
+      stderr_str = ''
+      
+      Open3.popen3(pdftk_path, file_name.to_s, 'dump_data_utf8') do |i, o, e, t|
+        out_reader = Thread.new { o.read }
+        err_reader = Thread.new { e.read }
+        i.close
+        stdout_str = out_reader.value
+        stderr_str = err_reader.value
+      end
+      
+      unless $?.success?
         raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
         return
       end
