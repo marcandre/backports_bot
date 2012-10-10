@@ -5,8 +5,14 @@ require_relative 'tags/pdf'
 require_relative 'tags/png'
 require_relative 'tags/tex'
 require_relative 'tags/c'
+require_relative 'tags/mmd'
 
 module TagFactory
+  def available_tagging_extensions
+    ['.pdf', '.png', '.tex', '.c', '.cpp', '.cxx', '.c++',
+     '.h', '.hpp', '.hxx', '.mmd']
+  end
+  
   def get_tags_for(file_name)
     extension = file_name.extname
     case extension
@@ -20,6 +26,7 @@ module TagFactory
     when '.h' then return Tags::C::get(file_name)
     when '.hpp' then return Tags::C::get(file_name)
     when '.hxx' then return Tags::C::get(file_name)
+    when '.mmd' then return Tags::MMD::get(file_name)
     else raise Thor::Error.new("ERROR: Don't know how to get tags for a file of extension '#{extension}'")
     end
   end
@@ -43,6 +50,7 @@ module TagFactory
     when '.h' then return Tags::C::set(file_name, tag)
     when '.hpp' then return Tags::C::set(file_name, tag)
     when '.hxx' then return Tags::C::set(file_name, tag)
+    when '.mmd' then return Tags::MMD::set(file_name, tag)
     else raise Thor::Error.new("ERROR: Don't know how to set tags for a file of extension '#{extension}'")
     end
   end
@@ -66,6 +74,7 @@ module TagFactory
     when '.h' then return Tags::C::unset(file_name, tag)
     when '.hpp' then return Tags::C::unset(file_name, tag)
     when '.hxx' then return Tags::C::unset(file_name, tag)
+    when '.mmd' then return Tags::MMD::unset(file_name, tag)
     else raise Thor::Error.new("ERROR: Don't know how to unset tags for a file of extension '#{extension}'")
     end
   end
@@ -83,6 +92,7 @@ module TagFactory
     when '.h' then return Tags::C::clear(file_name)
     when '.hpp' then return Tags::C::clear(file_name)
     when '.hxx' then return Tags::C::clear(file_name)
+    when '.mmd' then return Tags::MMD::clear(file_name)
     else raise Thor::Error.new("ERROR: Don't know how to clear all tags for a file of extension '#{extension}'")
     end
   end
