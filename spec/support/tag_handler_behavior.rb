@@ -26,7 +26,8 @@ shared_examples_for 'a tag handler' do
   
   describe '.get' do
     it 'exists' do
-      described_class.methods.should include(:get)
+      described_class.methods.should include(:get) if RUBY_VERSION >= "1.9.0"
+      described_class.methods.should include("get") if RUBY_VERSION < "1.9.0"
     end
     
     it 'gets tags from tagged files' do
@@ -40,7 +41,8 @@ shared_examples_for 'a tag handler' do
   
   describe '.set' do
     it 'exists' do
-      described_class.methods.should include(:set)
+      described_class.methods.should include(:set) if RUBY_VERSION >= "1.9.0"
+      described_class.methods.should include("set") if RUBY_VERSION < "1.9.0"
     end
     
     it 'sets tags in an untagged file' do
@@ -64,7 +66,8 @@ shared_examples_for 'a tag handler' do
   
   describe '.unset' do
     it 'exists' do
-      described_class.methods.should include(:unset)
+      described_class.methods.should include(:unset) if RUBY_VERSION >= "1.9.0"
+      described_class.methods.should include("unset") if RUBY_VERSION < "1.9.0"
     end
     
     it 'removes tags from a tagged file' do
@@ -88,7 +91,8 @@ shared_examples_for 'a tag handler' do
   
   describe '.clear' do
     it 'exists' do
-      described_class.methods.should include(:clear)
+      described_class.methods.should include(:clear) if RUBY_VERSION >= "1.9.0"
+      described_class.methods.should include("clear") if RUBY_VERSION < "1.9.0"
     end
     
     it 'clears tags from tagged files' do

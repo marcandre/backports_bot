@@ -7,18 +7,25 @@ class ConfigTester < Thor
   include Configuration
 end
 
-describe 'Configuration' do
+describe 'Configuration' do  
   describe '#initialize' do
     it 'loads default configuration values' do
-      Configuration::DEFAULT_CONFIG.keys.each do |k|
-        ConfigTester.new.get_config(k).should eq(Configuration::DEFAULT_CONFIG[k])
+      @obj = ConfigTester.new
+      @obj.stub(:load_config!) { }
+      @obj.stub(:save_config!) { }
+      
+      Configuration::DEFAULT_CONFIG.keys.each do |k|        
+        @obj.get_config(k).should eq(Configuration::DEFAULT_CONFIG[k])
       end
     end
   end
   
   describe '.get_config' do
-    before(:each) do
+    before(:each) do      
       @obj = ConfigTester.new
+      
+      @obj.stub(:load_config!) { }
+      @obj.stub(:save_config!) { }
     end
     
     it 'reads default values' do
@@ -32,8 +39,12 @@ describe 'Configuration' do
   end
   
   describe '.reset_config!' do
-    before(:each) do
+    before(:each) do      
       @obj = ConfigTester.new
+      
+      @obj.stub(:load_config!) { }
+      @obj.stub(:save_config!) { }
+      
       @obj.set_config :have_pdftk, true
     end
     
@@ -46,6 +57,10 @@ describe 'Configuration' do
   describe '.dump_config' do
     before(:each) do
       @obj = ConfigTester.new
+      
+      @obj.stub(:load_config!) { }
+      @obj.stub(:save_config!) { }
+      
       @obj.set_config :pdftk_path, 'wut'
     end
     
@@ -57,10 +72,11 @@ describe 'Configuration' do
   end
   
   describe '.load_config!' do
-    before(:each) do
+    before(:each) do      
       @obj = ConfigTester.new
+      
+      @obj.stub(:save_config!) { }
 
-      Configuration.unstub(:load_config!)
       @config_file = File.join(File.dirname(__FILE__), 'config.yml')
       @obj.stub(:config_path) { @config_file }      
     end
@@ -82,10 +98,11 @@ describe 'Configuration' do
   end
   
   describe '.save_config!' do
-    before(:each) do
+    before(:each) do      
       @obj = ConfigTester.new
+      
+      @obj.stub(:load_config!) { }
 
-      Configuration.unstub(:save_config!)
       @config_file = File.join(File.dirname(__FILE__), 'config.yml')
       @obj.stub(:config_path) { @config_file }      
     end

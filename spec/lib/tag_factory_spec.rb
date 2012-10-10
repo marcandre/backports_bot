@@ -4,17 +4,30 @@ require_relative '../../lib/paths'
 require_relative '../../lib/configuration'
 require_relative '../../lib/tag_factory'
 require_relative '../../lib/external_cmds'
+require_relative '../../lib/database'
 
 class TagFactoryTester
   include Paths
   include Configuration
   include TagFactory
   include ExternalCmds
+  include Database
 end
 
 describe 'TagFactory' do
   before(:each) do
     @obj = TagFactoryTester.new
+    
+    @obj.stub(:load_config!) { }
+    @obj.stub(:save_config!) { }
+    
+    @obj.stub(:load_database) { }
+    @obj.stub(:update_database_from_files) { }
+    @obj.stub(:set_database_tag) { }
+    @obj.stub(:unset_database_tag) { }
+    @obj.stub(:clear_database_tags) { }
+    @obj.stub(:files_for_tags) { [] }
+    
     @obj.find_external_cmds
   end
   

@@ -57,7 +57,10 @@ module Database
     file_id
   end
   
-  def read_database_tags(directory = '.')
+  def update_database_from_files(directory = '.')
+    drop_tables
+    create_tables
+    
     Pathname.glob(File.join('**', "*{#{available_tagging_extensions.join(',')}}")).each do |file|
       begin
         tags = get_tags_for file

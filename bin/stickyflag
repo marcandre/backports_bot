@@ -183,11 +183,8 @@ class StickyFlag < Thor
     contents.
   LONGDESC
   def update
-    drop_tables
-    create_tables
-    
     # FIXME: get configuration key here
-    read_database_tags
+    update_database_from_files
   end
   
   desc 'tags', "show the list of currently used tags"

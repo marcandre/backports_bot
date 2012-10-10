@@ -23,7 +23,7 @@ describe 'ExternalCmds' do
     @files_to_delete << path
   end
   
-  before(:each) do
+  before(:each) do    
     @files_to_delete = []
     @old_path = ENV['PATH']
     ENV['PATH'] = ''
@@ -38,6 +38,9 @@ describe 'ExternalCmds' do
     describe 'with no configuration set, no pdftk' do
       before(:each) do
         @obj = ExternalCmdsTester.new
+        @obj.stub(:load_config!) { }
+        @obj.stub(:save_config!) { }
+        
         @obj.set_config :pdftk_path, ''
         @obj.set_config :have_pdftk, false
       end
@@ -56,6 +59,9 @@ describe 'ExternalCmds' do
     describe 'with no configuration set, with pdftk' do
       before(:each) do
         @obj = ExternalCmdsTester.new
+        @obj.stub(:load_config!) { }
+        @obj.stub(:save_config!) { }
+        
         @obj.set_config :pdftk_path, ''
         @obj.set_config :have_pdftk, false
         
@@ -84,6 +90,9 @@ describe 'ExternalCmds' do
     describe 'with configuration set, non-executable pdftk' do
       before(:each) do
         @obj = ExternalCmdsTester.new
+        @obj.stub(:load_config!) { }
+        @obj.stub(:save_config!) { }
+        
         @obj.set_config :pdftk_path, __FILE__
         @obj.set_config :have_pdftk, true
       end
@@ -108,6 +117,9 @@ describe 'ExternalCmds' do
     describe 'with configuration set, non-existent pdftk' do
       before(:each) do
         @obj = ExternalCmdsTester.new
+        @obj.stub(:load_config!) { }
+        @obj.stub(:save_config!) { }
+        
         @obj.set_config :pdftk_path, '/nope/wut'
         @obj.set_config :have_pdftk, true
       end
@@ -132,6 +144,9 @@ describe 'ExternalCmds' do
     describe 'with configuration set, with pdftk' do
       before(:each) do
         @obj = ExternalCmdsTester.new
+        @obj.stub(:load_config!) { }
+        @obj.stub(:save_config!) { }
+        
         @obj.set_config :pdftk_path, File.expand_path(File.join(Dir.tmpdir, 'pdftk'))
         @obj.set_config :have_pdftk, true
         

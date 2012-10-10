@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'thor'
 require 'open3'
-require 'tempfile'
+require_relative '../tempfile_encoding'
 
 module Tags
   module PDF
@@ -51,7 +51,7 @@ module Tags
       
       tags << tag
       
-      info = Tempfile.new(['sfpdftag', '.txt'], Dir.tmpdir, :encoding => 'UTF-8')
+      info = Tempfile.new_with_encoding ['sfpdftag', '.txt']
       begin
         info.write("InfoKey: X-StickyFlag-Flags\n")
         info.write("InfoValue: #{tags.join(', ')}\n")
@@ -75,7 +75,7 @@ module Tags
       
       tags.delete(tag)
       
-      info = Tempfile.new(['sfpdftag', '.txt'], Dir.tmpdir, :encoding => 'UTF-8')
+      info = Tempfile.new_with_encoding ['sfpdftag', '.txt']
       begin
         info.write("InfoKey: X-StickyFlag-Flags\n")
         info.write("InfoValue: #{tags.join(', ')}\n")
@@ -94,7 +94,7 @@ module Tags
     end
 
     def clear(file_name, pdftk_path = 'pdftk')
-      info = Tempfile.new(['sfpdftag', '.txt'], Dir.tmpdir, :encoding => 'UTF-8')
+      info = Tempfile.new_with_encoding ['sfpdftag', '.txt']
       begin
         info.write("InfoKey: X-StickyFlag-Flags\n")
         info.write("InfoValue: \n")
