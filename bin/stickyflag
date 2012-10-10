@@ -1,4 +1,7 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby -KU
+# -*- encoding : utf-8 -*-
+$KCODE = 'U' if RUBY_VERSION < "1.9.0"
+
 require 'rubygems'
 require 'thor'
 require 'backports'
@@ -8,6 +11,7 @@ require_relative '../lib/configuration'
 require_relative '../lib/external_cmds'
 
 require_relative '../lib/tag_factory'
+require_relative '../lib/database'
 
 class StickyFlag < Thor
   include Thor::Actions
@@ -22,16 +26,18 @@ class StickyFlag < Thor
   include Configuration
   include ExternalCmds
   include TagFactory
+  include Database
 
   def initialize(*args)
     super
     
     if options.color?
-      shell = Thor::Shell::Color.new
+      self.shell = Thor::Shell::Color.new
     end
     
     load_config!
     find_external_cmds
+    load_database
   end
 
   desc 'config', "display and set configuration parameters"
@@ -167,6 +173,51 @@ class StickyFlag < Thor
       
       clear_tags_for path
       say_status :success, "Tags cleared for #{file_name}" unless options.quiet?
+    end
+  end
+  
+  desc 'update', "update the tag database from the files on disk"
+  long_desc <<-LONGDESC
+    `stickyflag update` will read all files under the current directory (or
+    using the `root` configuration key) and refresh the database based on their
+    contents.
+  LONGDESC
+  def update
+    drop_tables
+    create_tables
+    
+    # FIXME: get configuration key here
+    read_database_tags
+  end
+  
+  desc 'tags', "show the list of currently used tags"
+  long_desc <<-LONGDESC
+    `stickyflag tags` shows the list of currently used tags as present in the
+    database.  Note that this may be out of date with respect to the contents
+    of the disk, and can be refreshed using `stickyflag update`.
+  LONGDESC
+  def tags
+    puts "Tags currently in use:" unless options.quiet?
+    padding = ''
+    padding = '   ' unless options.quiet?
+    
+    tag_list.each do |t|
+      puts "#{padding}#{t}"
+    end
+  end
+  
+  desc 'find [TAG] [...]', "show all files that are tagged with the given tags"
+  long_desc <<-LONGDESC
+    `stickyflag find` locates all files that have a given tag or set of tags.
+    If multiple tags are provided, returned files must have all those tags.
+  LONGDESC
+  def find(*tags)
+    if tags.empty?
+      raise Thor::Error.new("stickyflag find requires at least 1 argument: \"stickyflag find [TAG] [...]\"")
+    end
+    
+    files_for_tags(tags).each do |file|
+      puts file
     end
   end
   

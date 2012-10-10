@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 module Tags
   module SourceCode
@@ -13,7 +14,7 @@ module Tags
     #
     
     def get(file_name)
-      File.open(file_name).each_line do |line|
+      File.open(file_name, 'r:UTF-8').each_line do |line|
         return [] unless line =~ comment_line_regex
 
         m = line.match(tag_line_regex)
@@ -35,8 +36,8 @@ module Tags
       set_tags = false
 
       outpath = File.tmpnam
-      File.open(outpath, 'w') do |outfile|
-        File.open(file_name).each_line do |line|
+      File.open(outpath, 'w:UTF-8') do |outfile|
+        File.open(file_name, 'r:UTF-8').each_line do |line|
           if line !~ comment_line_regex
             if set_tags == false
               # We haven't set the tags yet, but the current line does *not*
@@ -68,8 +69,8 @@ module Tags
       tags.delete(tag)
       
       outpath = File.tmpnam
-      File.open(outpath, 'w') do |outfile|
-        File.open(file_name).each_line do |line|
+      File.open(outpath, 'w:UTF-8') do |outfile|
+        File.open(file_name, 'r:UTF-8').each_line do |line|
           if line =~ tag_line_regex
             outfile.puts tag_line_for(tags.join(', '))
           else
@@ -83,8 +84,8 @@ module Tags
     
     def clear(file_name)
       outpath = File.tmpnam
-      File.open(outpath, 'w') do |outfile|
-        File.open(file_name).each_line do |line|
+      File.open(outpath, 'w:UTF-8') do |outfile|
+        File.open(file_name, 'r:UTF-8').each_line do |line|
           next if line =~ tag_line_regex
           outfile.puts line
         end

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'tmpdir'
 require 'thor'
 require_relative '../../lib/paths'
@@ -16,7 +17,7 @@ describe 'ExternalCmds' do
     ENV['PATH'] = Dir.tmpdir
     
     path = File.join(Dir.tmpdir, file_name)
-    File.open(path, 'w') { |f| f.write('test') }
+    File.open(path, 'w:UTF-8') { |f| f.write('test') }
     File.chmod(0755, path)
     
     @files_to_delete << path

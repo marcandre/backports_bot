@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require_relative '../../lib/paths'
 require_relative '../../lib/configuration'
 
@@ -69,7 +70,7 @@ describe 'Configuration' do
         :have_pdftk => true,
         :pdftk_path => 'wut'
       }
-      File.open(@config_file, 'w') do |f|
+      File.open(@config_file, 'w:UTF-8') do |f|
         YAML.dump(config, f)
       end
       
@@ -93,7 +94,7 @@ describe 'Configuration' do
       @obj.set_config :pdftk_path, 'wut'
       @obj.save_config!
       
-      config = YAML::load(File.open(@config_file))
+      config = YAML::load(File.open(@config_file, 'r:UTF-8'))
       config[:pdftk_path].should eq('wut')
       
       File.delete(@config_file)

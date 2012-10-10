@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'thor'
 require 'oily_png'
 require 'fileutils'
@@ -10,6 +11,7 @@ module Tags
       image = ChunkyPNG::Image.from_file(file_name)
       tag_string = image.metadata['X-StickyFlag-Flags']
       return [] if tag_string.nil?
+      tag_string.force_encoding('UTF-8') if RUBY_VERSION >= "1.9.0"
       tag_string.split(',').map { |t| t.empty? ? nil : t.strip }.compact
     end
     

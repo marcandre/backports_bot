@@ -13,3 +13,4 @@ gem 'chunky_png'
 gem 'oily_png'
 
 gem 'rspec'
+gem 'magic_encoding'

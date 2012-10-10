@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 shared_examples_for 'a tag handler' do
   let(:params) { [] }

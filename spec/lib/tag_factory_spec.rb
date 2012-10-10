@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'thor'
 require_relative '../../lib/paths'
 require_relative '../../lib/configuration'

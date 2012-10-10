@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'thor'
 require 'yaml'
 require_relative 'paths'
@@ -51,7 +52,7 @@ module Configuration
   def load_config!
     file_name = config_path
     if File.file? file_name
-      @configuration = YAML::load(File.open(file_name))
+      @configuration = YAML::load(File.open(file_name, 'r:UTF-8'))
     end
   end
   
@@ -59,7 +60,7 @@ module Configuration
     @configuration ||= DEFAULT_CONFIG.clone
   
     file_name = config_path
-    File.open(file_name, 'w') do |f|
+    File.open(file_name, 'w:UTF-8') do |f|
       YAML.dump(@configuration, f)
     end
   end

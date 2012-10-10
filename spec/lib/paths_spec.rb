@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require_relative '../../lib/paths'
 
 class PathsTester
@@ -6,7 +7,7 @@ end
 
 describe 'Paths' do
   describe '.config_path' do
-    it 'includes the config.yml filename' do
+    it 'includes the config.yml file name' do
       PathsTester.new.config_path.should include('config.yml')
     end
     
@@ -16,7 +17,7 @@ describe 'Paths' do
   end
   
   describe '.database_path' do
-    it 'includes the db.sqlite filename' do
+    it 'includes the db.sqlite file name' do
       PathsTester.new.database_path.should include('db.sqlite')
     end
     

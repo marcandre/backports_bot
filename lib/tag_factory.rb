@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'thor'
 require 'pathname'
 require 'backports'
@@ -38,6 +39,8 @@ module TagFactory
       return
     end
     
+    set_database_tag file_name, tag
+    
     extension = file_name.extname
     case extension
     when '.pdf' then return Tags::PDF::set(file_name, tag, get_config(:pdftk_path))
@@ -62,6 +65,8 @@ module TagFactory
       return
     end
     
+    unset_database_tag file_name, tag
+    
     extension = file_name.extname
     case extension
     when '.pdf' then return Tags::PDF::unset(file_name, tag, get_config(:pdftk_path))
@@ -80,6 +85,8 @@ module TagFactory
   end
   
   def clear_tags_for(file_name)
+    clear_database_tags file_name
+    
     extension = file_name.extname
     case extension
     when '.pdf' then return Tags::PDF::clear(file_name, get_config(:pdftk_path))

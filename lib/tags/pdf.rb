@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'thor'
 require 'open3'
 require 'tempfile'
@@ -17,6 +18,9 @@ module Tags
           i.close
           stdout_str = out_reader.value
           stderr_str = err_reader.value
+
+          stdout_str.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
+          stderr_str.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
         end
       rescue Exception
         raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
@@ -47,7 +51,7 @@ module Tags
       
       tags << tag
       
-      info = Tempfile.new(['sfpdftag', '.txt'])
+      info = Tempfile.new(['sfpdftag', '.txt'], Dir.tmpdir, :encoding => 'UTF-8')
       begin
         info.write("InfoKey: X-StickyFlag-Flags\n")
         info.write("InfoValue: #{tags.join(', ')}\n")
@@ -71,7 +75,7 @@ module Tags
       
       tags.delete(tag)
       
-      info = Tempfile.new(['sfpdftag', '.txt'])
+      info = Tempfile.new(['sfpdftag', '.txt'], Dir.tmpdir, :encoding => 'UTF-8')
       begin
         info.write("InfoKey: X-StickyFlag-Flags\n")
         info.write("InfoValue: #{tags.join(', ')}\n")
@@ -90,7 +94,7 @@ module Tags
     end
 
     def clear(file_name, pdftk_path = 'pdftk')
-      info = Tempfile.new(['sfpdftag', '.txt'])
+      info = Tempfile.new(['sfpdftag', '.txt'], Dir.tmpdir, :encoding => 'UTF-8')
       begin
         info.write("InfoKey: X-StickyFlag-Flags\n")
         info.write("InfoValue: \n")

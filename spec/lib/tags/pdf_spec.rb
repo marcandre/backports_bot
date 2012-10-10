@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require_relative '../../../lib/tags/pdf'
 require_relative '../../../lib/paths'
 require_relative '../../../lib/configuration'

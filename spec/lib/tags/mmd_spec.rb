@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require_relative '../../../lib/tags/mmd'
 
 describe Tags::MMD do
@@ -17,7 +18,7 @@ describe Tags::MMD do
     Tags::MMD.set(path, 'test2')
     Tags::MMD.get(path).should include('test2')
     
-    File.open(path).each_line.to_a.should include("Tags:        test, test2  \n")
+    File.open(path, 'r:UTF-8').each_line.to_a.should include("Tags:        test, test2  \n")
     
     File.delete path
   end    
@@ -28,7 +29,7 @@ describe Tags::MMD do
     Tags::MMD.set(path, 'test2')
     Tags::MMD.get(path).should include('test2')
     
-    File.open(path).each_line.to_a.should include("Tags:        asdf, sdfg, dfgh, fghj, test, qwer, test2  \n")
+    File.open(path, 'r:UTF-8').each_line.to_a.should include("Tags:        asdf, sdfg, dfgh, fghj, test, qwer, test2  \n")
     
     File.delete path
   end

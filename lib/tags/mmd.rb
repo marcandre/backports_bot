@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 module Tags
   module MMD    
@@ -37,8 +38,8 @@ module Tags
       counter = 0
 
       outpath = File.tmpnam
-      File.open(outpath, 'w') do |outfile|
-        File.open(file_name).each_line do |line|
+      File.open(outpath, 'w:UTF-8') do |outfile|
+        File.open(file_name, 'r:UTF-8').each_line do |line|
           if counter == 0
             if line !~ metadata_key_regex
               # If we're on the first line and there's no metadata at all,
@@ -93,7 +94,7 @@ module Tags
       key = ''
       value = ''
       
-      File.open(file_name).each_line do |line|
+      File.open(file_name, 'r:UTF-8').each_line do |line|
         if counter == 0
           # Check to see if there's any metadata at all
           m = line.match(metadata_key_regex)
