@@ -2,6 +2,8 @@
 require 'sqlite3'
 
 module Database
+  # NB: If you update this function significantly, you may have to change the
+  # corresponding stub in the specs.
   def load_database
     @database = SQLite3::Database.new database_path
     if @database.nil?
@@ -61,7 +63,7 @@ module Database
     drop_tables
     create_tables
     
-    Pathname.glob(File.join('**', "*{#{available_tagging_extensions.join(',')}}")).each do |file|
+    Pathname.glob(File.join(directory, '**', "*{#{available_tagging_extensions.join(',')}}")).each do |file|
       begin
         tags = get_tags_for file
       rescue Thor::Error
@@ -93,11 +95,31 @@ module Database
     file_id = get_file_id file_name
     tag_id = get_tag_id tag
     @database.execute "delete from tagged_files where file = ? and tag = ?", [ file_id, tag_id ]
+    
+    # See if that was the last file with this tag, and delete it if so
+    files_with_tag = @database.execute "select id from tagged_files where tag = ?", [ tag_id ]
+    if files_with_tag.empty?
+      @database.execute "delete from tag_list where id = ?", [ tag_id ]
+    end
   end
   
   def clear_database_tags(file_name)
     file_id = get_file_id file_name
-    @database.execute "delete from tagged_files where file = ?" [ file_id ]
+    @database.execute "delete from tagged_files where file = ?", [ file_id ]
+    
+    # That operation might have removed the last instance of a tag, clean up
+    # the tag list
+    tag_rows = @database.execute "select id from tag_list"
+    tag_rows.each do |row|
+      if row.empty?
+        raise Thor::Error.new("ERROR: Somehow got a bum row back from the tag_list")
+      end
+      
+      rows = @database.execute "select * from tagged_files where tag = ?", [ row[0] ]
+      if rows.empty?
+        @database.execute "delete from tag_list where id = ?", [ row[0] ]
+      end
+    end
   end
   
   def files_for_tags(tags)
