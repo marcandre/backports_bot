@@ -1,12 +1,13 @@
 # -*- encoding : utf-8 -*-
 require 'thor'
+require_relative '../../lib/patches/tempfile_encoding'
 require_relative '../../lib/paths'
 require_relative '../../lib/configuration'
 require_relative '../../lib/tag_factory'
 require_relative '../../lib/external_cmds'
 require_relative '../../lib/database'
 
-class TagFactoryTester
+class TagFactoryTester < Thor
   include Paths
   include Configuration
   include TagFactory
@@ -29,6 +30,54 @@ describe 'TagFactory' do
     @obj.stub(:files_for_tags) { [] }
     
     @obj.find_external_cmds
+  end
+  
+  describe '.available_tagging_extensions' do
+    # Some extensions require the presence of actual, good files, not
+    # just empty shells, so we can't test them in this way.  Skip those.
+    CANNOT_TEST = [ '.pdf', '.png' ]
+    
+    it 'should call get for every good extension' do
+      (@obj.available_tagging_extensions - CANNOT_TEST).each do |ext|
+        file = Tempfile.new_with_encoding(['ext', ext])
+        file.puts('test')        
+        file.close
+        
+        path = Pathname.new(file.path)
+        
+        expect { @obj.get_tags_for(path) }.to_not raise_error
+        file.unlink
+      end
+    end
+
+    it 'should call set/unset for every good extension' do
+      (@obj.available_tagging_extensions - CANNOT_TEST).each do |ext|
+        file = Tempfile.new_with_encoding(['ext', ext])
+        file.puts('test')        
+        file.close
+        
+        path = Pathname.new(file.path)
+        
+        expect { 
+          @obj.set_tag_for(path, 'test')
+          @obj.unset_tag_for(path, 'test')
+          }.to_not raise_error
+        file.unlink
+      end
+    end
+    
+    it 'should call clear for every good extension' do
+      (@obj.available_tagging_extensions - CANNOT_TEST).each do |ext|
+        file = Tempfile.new_with_encoding(['ext', ext])
+        file.puts('test')        
+        file.close
+        
+        path = Pathname.new(file.path)
+        
+        expect { @obj.clear_tags_for(path) }.to_not raise_error
+        file.unlink
+      end
+    end
   end
   
   describe '.get_tags_for' do
