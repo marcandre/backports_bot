@@ -13,4 +13,5 @@ gem 'chunky_png'
 gem 'oily_png'
 
 gem 'rspec'
+gem 'simplecov', :require => false
 gem 'magic_encoding'

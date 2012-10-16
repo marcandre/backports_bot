@@ -49,6 +49,14 @@ describe 'TagFactory' do
         file.unlink
       end
     end
+    
+    it 'should call get for other extensions' do
+      CANNOT_TEST.each do |ext|
+        path = copy_example "#{ext[1..-1]}_with_tag#{ext}"
+        expect { @obj.clear_tags_for(path) }.to_not raise_error
+        File.unlink(path)
+      end
+    end
 
     it 'should call set/unset for every good extension' do
       (@obj.available_tagging_extensions - CANNOT_TEST).each do |ext|
@@ -66,6 +74,17 @@ describe 'TagFactory' do
       end
     end
     
+    it 'should call set/unset for other extensions' do
+      CANNOT_TEST.each do |ext|
+        path = copy_example "#{ext[1..-1]}_with_tag#{ext}"
+        expect {
+          @obj.set_tag_for(path, 'test2')
+          @obj.unset_tag_for(path, 'test2')
+          }.to_not raise_error
+        File.unlink(path)
+      end
+    end
+    
     it 'should call clear for every good extension' do
       (@obj.available_tagging_extensions - CANNOT_TEST).each do |ext|
         file = Tempfile.new_with_encoding(['ext', ext])
@@ -76,6 +95,14 @@ describe 'TagFactory' do
         
         expect { @obj.clear_tags_for(path) }.to_not raise_error
         file.unlink
+      end
+    end
+    
+    it 'should call clear for other extensions' do
+      CANNOT_TEST.each do |ext|
+        path = copy_example "#{ext[1..-1]}_with_tag#{ext}"
+        expect { @obj.clear_tags_for(path) }.to_not raise_error
+        File.unlink(path)
       end
     end
   end
@@ -111,6 +138,7 @@ describe 'TagFactory' do
     end
     
     it 'should raise error for unknown extensions' do
+      @obj.stub(:get_tags_for) { [] }
       expect {
         @obj.set_tag_for(Pathname.new('asdf.zzy'), 'lol')
         }.to raise_error(Thor::Error)
@@ -137,6 +165,7 @@ describe 'TagFactory' do
     end
     
     it 'should raise error for unknown extensions' do
+      @obj.stub(:get_tags_for) { [ 'lol' ] }
       expect {
         @obj.unset_tag_for(Pathname.new('asdf.zzy'), 'lol')
         }.to raise_error(Thor::Error)

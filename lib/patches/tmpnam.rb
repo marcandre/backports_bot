@@ -17,12 +17,18 @@ class File
     counter = 0
     path = File.join(Dir.tmpdir, "#{pid}_#{sec}_#{usec}_#{rand(1000)}#{ext}")
     
+    # This is a corner case that should effectively never be possible, so
+    # don't try to cover it.
+    #:nocov:
     while File.exist? path
+      sec = Time.now.to_i
+      usec = Time.now.usec
       path = File.join(Dir.tmpdir, "#{pid}_#{sec}_#{usec}_#{rand(1000)}#{ext}")
       
       counter += 1
       raise 'ERROR: Cannot get unique temporary name' if counter >= 100
     end
+    #:nocov:
     
     path
   end

@@ -9,7 +9,11 @@ describe Tags::MMD do
   end
   
   it 'handles multiline tag documents' do
-    Tags::MMD.get(example_path('mmd_crazy_tags.mmd')).should include('test')
+    Tags::MMD.get(example_path('mmd_crazy_tags.mmd')).should include('sdfg')
+  end
+  
+  it 'handles all-metadata documents' do
+    Tags::MMD.get(example_path('mmd_all_meta.mmd')).should be_empty   
   end
   
   it 'can edit multiline metadata documents' do
@@ -29,7 +33,7 @@ describe Tags::MMD do
     Tags::MMD.set(path, 'test2')
     Tags::MMD.get(path).should include('test2')
     
-    File.open(path, 'r:UTF-8').each_line.to_a.should include("Tags:        asdf, sdfg, dfgh, fghj, test, qwer, test2  \n")
+    File.open(path, 'r:UTF-8').each_line.to_a.should include("Tags:        asdf, sdfg, dfgh, fghj, qwer, test2  \n")
     
     File.delete path
   end

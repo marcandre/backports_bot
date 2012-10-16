@@ -4,6 +4,8 @@ require 'fileutils'
 
 module Paths
   def config_path
+    # No code coverage: only ever runs one operating system branch
+    #:nocov:
     case RbConfig::CONFIG['target_os']
     when /darwin/i
       root_dir = File.expand_path("~/Library/Application Support/StickyFlag")
@@ -15,12 +17,15 @@ module Paths
     else
       root_dir = File.expand_path('~/.stickyflag')
     end
+    #:nocov:
       
     FileUtils.mkdir_p root_dir
     File.join(root_dir, 'config.yml')
   end
   
   def database_path
+    # No code coverage: only ever runs one operating system branch
+    #:nocov:
     case RbConfig::CONFIG['target_os']
     when /darwin/i
       root_dir = File.expand_path("~/Library/Application Support/StickyFlag")
@@ -32,6 +37,7 @@ module Paths
     else
       root_dir = File.expand_path('~/.stickyflag')
     end
+    #:nocov:
     
     FileUtils.mkdir_p root_dir
     File.join(root_dir, 'db.sqlite')

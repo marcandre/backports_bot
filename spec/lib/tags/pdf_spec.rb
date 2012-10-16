@@ -22,4 +22,18 @@ describe Tags::PDF do
       [ config.get_config(:pdftk_path) ]
     }
   end
+  
+  context 'with a bad pdftk path' do
+    it 'raises errors for everything' do
+      expect { Tags::PDF.get(example_path("pdf_with_tag.pdf"), '/wut/bad') }.to raise_error(Thor::Error)
+      expect { Tags::PDF.clear(example_path("pdf_with_tag.pdf"), '/wut/bad') }.to raise_error(Thor::Error)
+
+      # If get doesn't succeed, we won't get all the way into set or unset
+      # with the bad pdftk path.
+      Tags::PDF.stub(:get) { [ 'test' ] }
+      expect { Tags::PDF.set(example_path("pdf_with_tag.pdf"), 'test2', '/wut/bad') }.to raise_error(Thor::Error)
+      expect { Tags::PDF.unset(example_path("pdf_with_tag.pdf"), 'test', '/wut/bad') }.to raise_error(Thor::Error)
+      Tags::PDF.unstub(:get)
+    end
+  end
 end

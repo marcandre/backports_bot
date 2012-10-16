@@ -62,7 +62,6 @@ module TagFactory
     tags = get_tags_for file_name
     unless tags.include? tag
       raise Thor::Error.new("ERROR: Cannot unset tag #{tag} from file, not set")
-      return
     end
     
     unset_database_tag file_name, tag

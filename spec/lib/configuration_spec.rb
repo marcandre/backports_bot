@@ -28,13 +28,25 @@ describe 'Configuration' do
       @obj.stub(:save_config!) { }
     end
     
-    it 'reads default values' do
-      @obj.get_config(:have_pdftk).should eq(false)
+    context 'with good keys' do
+      it 'reads default values' do
+        @obj.get_config(:have_pdftk).should eq(false)
+      end
+    
+      it 'reads updated values' do
+        @obj.set_config :have_pdftk, true
+        @obj.get_config(:have_pdftk).should eq(true)
+      end
     end
     
-    it 'reads updated values' do
-      @obj.set_config :have_pdftk, true
-      @obj.get_config(:have_pdftk).should eq(true)
+    context 'with bad keys' do
+      it 'raises an error on get' do
+        expect { @obj.get_config(:bad_key) }.to raise_error
+      end
+      
+      it 'raises an error on set' do
+        expect { @obj.set_config(:bad_key, 'test') }.to raise_error
+      end
     end
   end
   

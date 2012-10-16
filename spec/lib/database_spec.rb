@@ -34,6 +34,22 @@ describe 'Database' do
     @database.close
   end
   
+  describe '.load_database' do
+    before(:each) do
+      @obj.stub(:database_path) { ":memory:" }
+      @obj.unstub(:load_database)
+    end
+    
+    it 'successfully creates a database' do
+      expect { @obj.load_database }.to_not raise_error
+    end
+    
+    it 'sets the member variable' do
+      @obj.load_database
+      @obj.instance_variable_get(:@database).should be
+    end
+  end
+  
   describe '.update_database_from_files' do
     context 'without a specific directory' do
       before(:each) do
@@ -49,8 +65,8 @@ describe 'Database' do
         @obj.tag_list.should include('test')
       end
       
-      it 'has found the sample markdown file' do
-        path = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_tags.mmd'))
+      it 'has found a sample markdown file' do
+        path = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_keys.mmd'))
         @obj.files_for_tags(['test']).map { |f| File.absolute_path(f) }.should include(path)
       end
     end
@@ -72,6 +88,31 @@ describe 'Database' do
       end
     end
     
+    context 'with some bad files in the directory' do
+      before(:each) do
+        @dir = File.tmpnam('.dir')
+        Dir.mkdir(@dir)
+        
+        file = File.new(File.join(@dir, 'bad.pdf'), 'w:UTF-8')
+        file.puts('test bad')
+        file.close
+      end
+      
+      after(:each) do
+        File.unlink(File.join(@dir, 'bad.pdf'))
+        Dir.rmdir(@dir)
+      end
+      
+      it 'does not throw an exception' do
+        expect { @obj.update_database_from_files(@dir) }.to_not raise_error
+      end
+      
+      it 'prints a warning' do
+        @obj.should_receive(:say_status).with(:warning, kind_of(String), kind_of(Symbol))
+        @obj.update_database_from_files(@dir)
+      end
+    end
+    
     context 'with a full directory' do
       before(:each) do
         @obj.update_database_from_files(File.join(File.dirname(__FILE__), '..', 'support', 'examples'))
@@ -86,8 +127,8 @@ describe 'Database' do
         @obj.tag_list.should include('test')
       end
       
-      it 'has found the sample markdown file' do
-        path = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_tags.mmd'))
+      it 'has found a sample markdown file' do
+        path = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_keys.mmd'))
         @obj.files_for_tags(['test']).map { |f| File.absolute_path(f) }.should include(path)
       end
     end
@@ -220,28 +261,56 @@ describe 'Database' do
       @obj.update_database_from_files(File.join(File.dirname(__FILE__), '..', 'support', 'examples'))
     end
     
-    it 'includes one of the markdown files' do
-      path = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_tags.mmd')
-      @obj.files_for_tags([ 'test' ]).should include(path)
+    context 'with good, single tags' do
+      it 'includes one of the markdown files' do
+        path = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_keys.mmd')
+        @obj.files_for_tags([ 'test' ]).should include(path)
+      end
+    
+      it 'does not include files that lack a tag' do
+        path = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_with_tag.mmd')
+        @obj.files_for_tags([ 'asdf' ]).should_not include(path)
+      end
+    
+      it 'does not include untaggable files' do
+        path = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'untaggable.txt')
+        @obj.files_for_tags([ 'test' ]).should_not include(path)
+      end
     end
     
-    it 'does not include files that lack a tag' do
-      path = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_with_tag.mmd')
-      @obj.files_for_tags([ 'asdf' ]).should_not include(path)
-    end
-    
-    it 'does not include untaggable files' do
-      path = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'untaggable.txt')
-      @obj.files_for_tags([ 'test' ]).should_not include(path)
-    end
-    
-    it 'combines multiple tags with boolean AND' do
-      path1 = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_tags.mmd')
-      path2 = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_with_tag.mmd')
+    context 'with multiple tags' do
+      it 'combines with boolean AND' do
+        path1 = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_tags.mmd')
+        path2 = File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_with_tag.mmd')
       
-      files = @obj.files_for_tags([ 'test', 'asdf', 'qwer' ])
-      files.should include(path1)
-      files.should_not include(path2)
+        files = @obj.files_for_tags([ 'sdfg', 'asdf', 'qwer' ])
+        files.should include(path1)
+        files.should_not include(path2)
+      end
+      
+      it 'prints a warning if no files have all those tags' do
+        @obj.should_receive(:say_status).with(:warning, kind_of(String), kind_of(Symbol))
+        @obj.files_for_tags([ 'asdf', 'test' ])
+      end
+      
+      it 'returns an empty array if no files have all those tags' do
+        @obj.files_for_tags([ 'asdf', 'test' ]).should be_empty
+      end
+    end
+    
+    context 'with missing tags' do
+      it "doesn't throw" do
+        expect { @obj.files_for_tags([ 'zuzzax' ]) }.to_not raise_error
+      end
+
+      it 'prints a warning' do
+        @obj.should_receive(:say_status).with(:warning, kind_of(String), kind_of(Symbol))
+        @obj.files_for_tags([ 'zuzzax' ])
+      end
+    
+      it 'returns an empty array' do
+        @obj.files_for_tags([ 'zuzzax', 'test' ]).should be_empty
+      end
     end
   end
   

@@ -2,6 +2,12 @@
 $KCODE = 'U' if RUBY_VERSION < "1.9.0"
 
 require 'rubygems'
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/spec/'
+  coverage_dir '/spec/coverage'
+end
+
 require 'backports'
 require 'rspec/autorun'
 require 'thor'

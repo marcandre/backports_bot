@@ -6,9 +6,7 @@ module Database
   # corresponding stub in the specs.
   def load_database
     @database = SQLite3::Database.new database_path
-    if @database.nil?
-      raise Thor::Error.new("ERROR: Could not create database at '#{database_path}'")
-    end
+    raise Thor::Error.new("ERROR: Could not create database at '#{database_path}'") if @database.nil?
     
     create_tables
     at_exit { @database.close }
@@ -68,7 +66,7 @@ module Database
         tags = get_tags_for file
       rescue Thor::Error
         # Just skip this file, then, don't error out entirely
-        say_status :warning, "Could not read tags from '#{file}', thought we should be able to"
+        say_status :warning, "Could not read tags from '#{file}', despite a valid extension", :yellow
         next
       end
       
@@ -111,9 +109,7 @@ module Database
     # the tag list
     tag_rows = @database.execute "select id from tag_list"
     tag_rows.each do |row|
-      if row.empty?
-        raise Thor::Error.new("ERROR: Somehow got a bum row back from the tag_list")
-      end
+      raise Thor::Error.new("INTERNAL ERROR: Database row error in tag_list") if row.empty?
       
       rows = @database.execute "select * from tagged_files where tag = ?", [ row[0] ]
       if rows.empty?
@@ -124,29 +120,30 @@ module Database
   
   def files_for_tags(tags)
     # Map tags to tag IDs, but don't add any missing tags
+    bad_tag = false
     tag_ids = []
     tags.each do |tag|
       tag_id = @database.get_first_value "select id from tag_list where tag_name = ?", [ tag ]
       unless tag_id
         say_status :warning, "Tag '#{tag}' is not present in the database (try `stickyflag update`)", :yellow
+        bad_tag = true
         next
       end
       
       tag_ids << tag_id
     end
+    return [] if bad_tag
     
     rows = @database.execute "select file from tagged_files where tag in ( #{tag_ids.join(', ')} ) group by file having count(*) = #{tag_ids.count}"
     if rows.empty?
       say_status :warning, "Requested combination of tags not found", :yellow
-      return
+      return []
     end
     
     files = []
     rows.each do |row|
       file = @database.get_first_value "select file_name from file_list where id = ?", [ row[0] ]
-      unless file
-        raise Thor::Error.new("ERROR: Could not get file_name for id saved in database (re-run `stickyflag update`)")
-      end
+      raise Thor::Error.new("ERROR: Could not get file_name for id saved in database (re-run `stickyflag update`)") unless file
       
       files << file
     end

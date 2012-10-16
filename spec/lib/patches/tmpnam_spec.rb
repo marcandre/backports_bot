@@ -1,3 +1,4 @@
+require 'fileutils'
 
 describe 'File' do
   describe '.tmpnam' do
@@ -17,6 +18,16 @@ describe 'File' do
     
     it "puts files in the temporary directory" do
       File.tmpnam.should start_with(Dir.tmpdir)
+    end
+    
+    it "can create lots and lots in a row" do
+      files = []
+      (1..1000).each do |i|
+        files << File.tmpnam
+        FileUtils.touch(files.last)
+      end
+      
+      files.each { |f| File.unlink(f) }
     end
   end
 end

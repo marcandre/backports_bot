@@ -31,11 +31,7 @@ module Configuration
   
   def reset_config!
     @configuration = DEFAULT_CONFIG.clone
-    
-    file_name = config_path
-    if File.file? file_name
-      FileUtils::rm_f file_name
-    end
+    save_config!
   end
   
   def dump_config

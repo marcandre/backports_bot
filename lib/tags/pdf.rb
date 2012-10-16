@@ -24,7 +24,9 @@ module Tags
         end
       rescue Exception
         raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
-        return
+      end      
+      if stderr_str.start_with? "Error: "
+        raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
       end
       
       # More than one of these shouldn't be possible, but try to recover if
@@ -58,9 +60,9 @@ module Tags
         info.close
         
         outpath = File.tmpnam('.pdf')
-        unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath
+        ret = system(pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath)
+        unless ret == true
           raise Thor::Error.new("ERROR: Failed to set tag for #{file_name}; pdftk call failed")
-          return
         end
           
         FileUtils.mv outpath, file_name
@@ -82,9 +84,9 @@ module Tags
         info.close
         
         outpath = File.tmpnam('.pdf')
-        unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath
+        ret = system(pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath)
+        unless ret == true
           raise Thor::Error.new("ERROR: Failed to unset tag for #{file_name}; pdftk call failed")
-          return
         end
           
         FileUtils.mv outpath, file_name
@@ -101,9 +103,9 @@ module Tags
         info.close
         
         outpath = File.tmpnam('.pdf')
-        unless system pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath
+        ret = system(pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath)
+        unless ret == true
           raise Thor::Error.new("ERROR: Failed to clear tags for #{file_name}; pdftk call failed")
-          return
         end
           
         FileUtils.mv outpath, file_name

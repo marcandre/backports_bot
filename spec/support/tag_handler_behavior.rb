@@ -54,6 +54,15 @@ shared_examples_for 'a tag handler' do
       File.unlink(path)
     end
     
+    it 'sets tags in a tagged file' do
+      path = copy_example_with_tag
+      
+      described_class.set(*params_for(path, 'rspec'))
+      described_class.get(*params_for(path)).should include('rspec')
+      
+      File.unlink(path)
+    end
+    
     it 'does the right thing when setting an already set tag' do
       path = copy_example_with_tag
       
