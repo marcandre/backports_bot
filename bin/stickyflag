@@ -45,9 +45,9 @@ class StickyFlag < Thor
     `stickyflag config` allows you to set persistent configuration parameters
     for StickyFlag.
     
-    With only -k <key> specified, display the current value for the given key.
+    With only --key <key> specified, display the current value for the given key.
     
-    With -k <key> <value>, set the value for the key.
+    With --key <key> <value>, set the value for the key.
     
     With the --list option, list all available configuration parameters and 
     their current values.
@@ -64,9 +64,13 @@ class StickyFlag < Thor
       return
     end
     
-    if options.list? || options[:key] == nil
+    if options.list? || (options[:key].nil? && value.nil?)
       dump_config
       return
+    end
+    
+    if options[:key].nil?
+      raise Thor::Error.new("ERROR: Cannot set a value without a key specified")
     end
     
     if value.nil?
@@ -81,14 +85,14 @@ class StickyFlag < Thor
     save_config!
   end
   
-  desc 'show [FILES]', "show the tags set for a set of files"
+  desc 'get [FILES]', "print the tags set for a set of files"
   long_desc <<-LONGDESC
-    `stickyflag show` lets you look at the tags that have been applied to
+    `stickyflag get` lets you look at the tags that have been applied to
     a file or set of files.
   LONGDESC
-  def show(*files)
+  def get(*files)
     if files.empty?
-      raise Thor::Error.new("stickyflag show requires at least 1 argument: \"stickyflag show [FILES]\"")
+      raise Thor::Error.new("stickyflag get requires at least 1 argument: \"stickyflag get [FILES]\"")
     end
     
     files.each do |file_name|
@@ -183,8 +187,10 @@ class StickyFlag < Thor
     contents.
   LONGDESC
   def update
-    # FIXME: get configuration key here
-    update_database_from_files
+    root = get_config(:root).strip
+    root = '.' if root.empty? || root.nil?
+    
+    update_database_from_files root
   end
   
   desc 'tags', "show the list of currently used tags"
@@ -230,4 +236,4 @@ class StickyFlag < Thor
   end
 end
 
-StickyFlag.start
+StickyFlag.start unless ENV['RSPEC_TESTING']

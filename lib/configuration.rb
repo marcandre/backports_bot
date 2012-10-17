@@ -6,7 +6,8 @@ require_relative 'paths'
 module Configuration
   DEFAULT_CONFIG = {
     :have_pdftk => false,
-    :pdftk_path => ''
+    :pdftk_path => '',
+    :root => ''
   }
   
   def get_config(key)
