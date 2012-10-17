@@ -25,6 +25,12 @@ describe 'StickyFlag' do
           sf.should_receive(:dump_config)
         end
       end
+
+      it 'prints out the configuration with --quiet' do
+        run_with_args('config', '--list', '--quiet') do |sf|
+          sf.should_receive(:dump_config)
+        end
+      end
     end
     
     context 'with a key but no value' do
@@ -69,7 +75,86 @@ describe 'StickyFlag' do
   end
   
   describe '.get' do
+    context 'with no arguments' do
+      it 'raises an error' do
+        expect {
+          run_with_args('get')
+          }.to raise_error
+      end
+    end
     
+    context 'with a missing file' do
+      it 'prints an error message' do
+        run_with_args('get', 'bad.pdf') do |sf|
+          sf.should_receive(:say_status).with(:error, /bad\.pdf/, kind_of(Symbol))
+        end
+      end
+      
+      it 'does not print an error message with --quiet' do
+        run_with_args('get', 'bad.pdf', '--quiet') do |sf|
+          sf.should_not_receive(:say)
+          sf.should_not_receive(:say_status)
+        end
+      end
+      
+      it 'does not print an error message with --force' do
+        run_with_args('get', 'bad.pdf', '--force') do |sf|
+          sf.should_not_receive(:say)
+          sf.should_not_receive(:say_status)
+        end
+      end
+    end
+    
+    context 'with a file without tags' do
+      it 'prints a no-tags message' do
+        run_with_args('get', File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'c_no_tags.c')) do |sf|
+          sf.should_receive(:say).with(/.*c_no_tags.c: no tags/)
+        end
+      end
+      
+      it 'does not print a no-tags message with --quiet' do
+        run_with_args('get', File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'c_no_tags.c'), '--quiet') do |sf|
+          sf.should_not_receive(:say)
+          sf.should_not_receive(:say_status)
+        end
+      end
+
+      it 'does not print a no-tags message with --force' do
+        run_with_args('get', File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'c_no_tags.c'), '--force') do |sf|
+          sf.should_not_receive(:say)
+          sf.should_not_receive(:say_status)
+        end
+      end
+    end
+    
+    context 'with a file with tags' do
+      it 'prints the tags' do
+        run_with_args('get', File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_tags.mmd')) do |sf|
+          sf.should_receive(:say).with(/ asdf, /)
+        end
+      end
+      
+      it 'prints the tags with --quiet' do
+        run_with_args('get', File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_tags.mmd'), '--quiet') do |sf|
+          sf.should_receive(:say).with(/ asdf, /)
+        end        
+      end
+
+      it 'prints the tags with --force' do
+        run_with_args('get', File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_tags.mmd'), '--force') do |sf|
+          sf.should_receive(:say).with(/ asdf, /)
+        end        
+      end
+    end
+    
+    context 'with multiple files with tags' do
+      it 'prints all the files' do
+        run_with_args('get', File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_tags.mmd'), File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'c_with_tag.c')) do |sf|
+          sf.should_receive(:say).with(/mmd_crazy_tags\.mmd/)
+          sf.should_receive(:say).with(/c_with_tag\.c/)
+        end
+      end
+    end
   end
   
   describe '.set' do
