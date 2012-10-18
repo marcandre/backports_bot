@@ -125,7 +125,7 @@ module Database
     tags.each do |tag|
       tag_id = @database.get_first_value "select id from tag_list where tag_name = ?", [ tag ]
       unless tag_id
-        say_status :warning, "Tag '#{tag}' is not present in the database (try `stickyflag update`)", :yellow
+        say_status :warning, "Tag '#{tag}' is not present in the database (try `stickyflag update`)", :yellow unless options.quiet?
         bad_tag = true
         next
       end
@@ -136,7 +136,7 @@ module Database
     
     rows = @database.execute "select file from tagged_files where tag in ( #{tag_ids.join(', ')} ) group by file having count(*) = #{tag_ids.count}"
     if rows.empty?
-      say_status :warning, "Requested combination of tags not found", :yellow
+      say_status :warning, "Requested combination of tags not found", :yellow unless options.quiet?
       return []
     end
     

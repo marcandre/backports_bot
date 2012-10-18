@@ -184,7 +184,7 @@ class StickyFlag < Thor
       end
       
       clear_tags_for path
-      say_status :success, "Tags cleared for #{file_name}" unless options.quiet?
+      say_status :success, "Tags cleared for #{file_name}", :green unless options.quiet?
     end
   end
   
@@ -208,12 +208,12 @@ class StickyFlag < Thor
     of the disk, and can be refreshed using `stickyflag update`.
   LONGDESC
   def tags
-    puts "Tags currently in use:" unless options.quiet?
+    say "Tags currently in use:" unless options.quiet?
     padding = ''
     padding = '   ' unless options.quiet?
     
     tag_list.each do |t|
-      puts "#{padding}#{t}"
+      say "#{padding}#{t}"
     end
   end
   
@@ -226,9 +226,10 @@ class StickyFlag < Thor
     if tags.empty?
       raise Thor::Error.new("stickyflag find requires at least 1 argument: \"stickyflag find [TAG] [...]\"")
     end
+    tags.each { |t| check_tag t }
     
     files_for_tags(tags).each do |file|
-      puts file
+      say file
     end
   end
   
