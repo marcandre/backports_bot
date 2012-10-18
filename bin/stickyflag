@@ -126,13 +126,13 @@ class StickyFlag < Thor
     path = Pathname.new(file_name)
     unless path.file?
       say_status :error, "File #{file_name} does not exist", :red unless options.quiet?
-      exit 1
+      return
     end
     
     set_tag_for path, tag
     
     tags = get_tags_for path
-    say_status :success, "New tags for #{file_name}: #{tags.join(', ')}" unless options.quiet?
+    say_status :success, "New tags for #{file_name}: #{tags.join(', ')}", :green unless options.quiet?
   end
   
   
@@ -148,13 +148,21 @@ class StickyFlag < Thor
     path = Pathname.new(file_name)
     unless path.file?
       say_status :error, "File #{file_name} does not exist", :red unless options.quiet?
-      exit 1
+      return
     end
     
     unset_tag_for path, tag
     
-    tags = get_tags_for path
-    say_status :success, "New tags for #{file_name}: #{tags.join(', ')}" unless options.quiet?
+    # Unsetting a tag might leave us with no tags at all, which makes this more
+    # complicated than the #set behavior
+    unless options.quiet?
+      tags = get_tags_for path
+      if tags.empty?
+        say_status :success, "New tags for #{file_name}: no tags", :green
+      else
+        say_status :success, "New tags for #{file_name}: #{tags.join(', ')}", :green
+      end
+    end
   end
   
   

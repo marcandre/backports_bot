@@ -2,7 +2,7 @@ require 'thor'
 load File.join(File.dirname(__FILE__), '..', '..', 'bin', 'stickyflag')
 
 describe 'StickyFlag' do  
-  describe '.config' do
+  describe '#config' do
     context 'without any further parameters' do
       it 'prints out the configuration' do
         run_with_args('config') do |sf|
@@ -74,7 +74,7 @@ describe 'StickyFlag' do
     end
   end
   
-  describe '.get' do
+  describe '#get' do
     context 'with no arguments' do
       it 'raises an error' do
         expect {
@@ -157,27 +157,180 @@ describe 'StickyFlag' do
     end
   end
   
-  describe '.set' do
+  describe '#set' do
+    context 'with no parameters' do
+      it 'raises an error' do
+        expect {
+          run_with_args('set')
+          }.to raise_error
+      end
+    end
+    
+    context 'with just a file' do
+      it 'raises an error' do
+        expect {
+          run_with_args('set', 'bad.pdf')
+          }.to raise_error
+      end
+    end
+    
+    context 'with a good file and an invalid tag' do
+      it 'raises an error' do
+        expect {
+          run_with_args('set', __FILE__, 'asdf,asdf')
+          }.to raise_error
+      end
+      
+      it 'also raises on blank tags' do
+        expect {
+          run_with_args('set', __FILE__, '')
+          }.to raise_error
+      end
+    end
+    
+    context 'with a missing file and a good tag' do
+      it 'prints an error message' do
+        run_with_args('set', 'bad.pdf', 'asdf') do |sf|
+          sf.should_receive(:say_status).with(:error, /bad\.pdf/, :red)
+        end
+      end
+      
+      it 'does not print an error message with --quiet' do
+        run_with_args('set', 'bad.pdf', 'asdf', '--quiet') do |sf|
+          sf.should_not_receive(:say)
+          sf.should_not_receive(:say_status)
+        end
+      end
+    end
+    
+    context 'with a good file and a good tag' do
+      before(:each) do
+        @path = copy_example('c_with_tag.c').to_s
+      end
+      after(:each) do
+        File.unlink(@path)
+      end
+      
+      it 'sets the tags' do
+        run_with_args('set', @path, 'test2')
+        run_with_args('get', @path) do |sf|
+          sf.should_receive(:say).with(/ test2/)
+        end
+      end
+      
+      it 'prints all the tags' do
+        run_with_args('set', @path, 'test2') do |sf|
+          sf.should_receive(:say_status).with(:success, /: test, test2/, :green)
+        end
+      end
+      
+      it 'prints nothing with --quiet' do
+        run_with_args('set', @path, 'test2', '--quiet') do |sf|
+          sf.should_not_receive(:say)
+          sf.should_not_receive(:say_status)
+        end
+      end
+    end
+  end
+  
+  describe '#unset' do
+    context 'with no parameters' do
+      it 'raises an error' do
+        expect {
+          run_with_args('unset')
+          }.to raise_error
+      end
+    end
+    
+    context 'with just a file' do
+      it 'raises an error' do
+        expect {
+          run_with_args('unset', 'bad.pdf')
+          }.to raise_error
+      end
+    end
+    
+    context 'with a good file and an invalid tag' do
+      it 'raises an error' do
+        expect {
+          run_with_args('unset', __FILE__, 'asdf,asdf')
+          }.to raise_error
+      end
+    end
+    
+    context 'with a missing file and a good tag' do
+      it 'prints an error message' do
+        run_with_args('unset', 'bad.pdf', 'asdf') do |sf|
+          sf.should_receive(:say_status).with(:error, /bad\.pdf/, :red)
+        end
+      end
+      
+      it 'does not print an error message with --quiet' do
+        run_with_args('unset', 'bad.pdf', 'asdf', '--quiet') do |sf|
+          sf.should_not_receive(:say)
+          sf.should_not_receive(:say_status)
+        end
+      end
+    end
+    
+    context 'with a good file and a good tag' do
+      before(:each) do
+        @path = copy_example('c_with_tag.c').to_s
+      end
+      after(:each) do
+        File.unlink(@path)
+      end
+      
+      it 'sets the tags' do
+        run_with_args('unset', @path, 'test')
+        run_with_args('get', @path) do |sf|
+          sf.should_receive(:say).with(/ no tags/)
+        end
+      end
+      
+      it 'prints no tags' do
+        run_with_args('unset', @path, 'test') do |sf|
+          sf.should_receive(:say_status).with(:success, /: no tags/, :green)
+        end
+      end
+      
+      it 'prints nothing with --quiet' do
+        run_with_args('unset', @path, 'test', '--quiet') do |sf|
+          sf.should_not_receive(:say)
+          sf.should_not_receive(:say_status)
+        end
+      end
+    end
+    
+    context 'with a file with multiple tags' do
+      before(:each) do
+        @path = copy_example('mmd_crazy_tags.mmd').to_s
+      end
+      after(:each) do
+        File.unlink(@path)
+      end
+      
+      it 'prints the remaining tags' do
+        run_with_args('unset', @path, 'asdf') do |sf|
+          sf.should_receive(:say_status).with(:success, /: sdfg/, :green)
+        end
+      end
+    end
+  end
+  
+  describe '#clear' do
     
   end
   
-  describe '.unset' do
+  describe '#update' do
     
   end
   
-  describe '.clear' do
+  describe '#tags' do
     
   end
   
-  describe '.update' do
-    
-  end
-  
-  describe '.tags' do
-    
-  end
-  
-  describe '.find' do
+  describe '#find' do
     
   end
 end
