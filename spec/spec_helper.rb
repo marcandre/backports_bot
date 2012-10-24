@@ -4,7 +4,7 @@ ENV['RSPEC_TESTING'] = '1'
 ENV['THOR_DEBUG'] = '1'
 
 require 'rubygems'
-require 'simplecov'
+require 'simplecov' unless ENV["CI"] == 'true'
 
 require 'backports'
 require 'rspec/autorun'
