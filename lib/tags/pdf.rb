@@ -24,8 +24,8 @@ module Tags
         end
       rescue Exception
         raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
-      end      
-      if stderr_str.start_with? "Error: "
+      end
+      if stderr_str.start_with?("Error: ") || stderr_str.include?("Errno::ENOENT")
         raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
       end
       
