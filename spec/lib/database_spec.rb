@@ -66,8 +66,8 @@ describe 'Database' do
       end
       
       it 'has found a sample markdown file' do
-        path = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_keys.mmd'))
-        @obj.files_for_tags(['test']).map { |f| File.absolute_path(f) }.should include(path)
+        path = File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_keys.mmd'))
+        @obj.files_for_tags(['test']).map { |f| File.expand_path(f) }.should include(path)
       end
     end
     
@@ -128,8 +128,8 @@ describe 'Database' do
       end
       
       it 'has found a sample markdown file' do
-        path = File.absolute_path(File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_keys.mmd'))
-        @obj.files_for_tags(['test']).map { |f| File.absolute_path(f) }.should include(path)
+        path = File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'examples', 'mmd_crazy_keys.mmd'))
+        @obj.files_for_tags(['test']).map { |f| File.expand_path(f) }.should include(path)
       end
     end
   end

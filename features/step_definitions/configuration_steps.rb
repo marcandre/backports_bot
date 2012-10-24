@@ -7,7 +7,7 @@ Given /a clean configuration/ do
 end
 
 Given /the example configuration/ do
-  path = File.absolute_path(File.join(File.dirname(__FILE__), '..', '..', 'spec', 'support', 'examples'))
+  path = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'spec', 'support', 'examples'))
   
   steps %Q{
     Given a clean configuration
