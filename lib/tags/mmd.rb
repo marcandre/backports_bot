@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+require_relative '../patches/tmpnam.rb'
 
 module Tags
   module MMD    
