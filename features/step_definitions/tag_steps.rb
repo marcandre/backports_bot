@@ -45,3 +45,17 @@ When /I quietly unset the tag "(.*?)" for "(.*?)"$/ do |tag, filename|
     When I run `stickyflag unset '#{path}' '#{tag}' --quiet`
   }
 end
+
+When /I clear the tags for (".*?")$/ do |filename_strings|
+  filenames = filename_strings.scan(/"([^"]+?)"/).flatten.map { |f| "'#{copy_example(f).to_s}'" }
+  steps %Q{
+    When I run `stickyflag clear #{filenames.join(' ')}`
+  }
+end
+
+When /I quietly clear the tags for (".*?")$/ do |filename_strings|
+  filenames = filename_strings.scan(/"([^"]+?)"/).flatten.map { |f| "'#{copy_example(f).to_s}'" }
+  steps %Q{
+    When I run `stickyflag clear #{filenames.join(' ')} --quiet`
+  }
+end

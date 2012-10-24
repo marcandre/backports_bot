@@ -3,7 +3,7 @@ before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -qq pdftk
 bundler_args: --without development
-script: "bundle exec rspec spec && bundle exec cucumber"
+script: "bundle exec rspec spec && bundle exec cucumber -q"
 
 env:
     - CI=true
