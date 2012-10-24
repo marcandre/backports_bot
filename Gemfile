@@ -1,4 +1,4 @@
-source "http://rubygems.org"
+source :rubygems
 
 gem 'thor'
 
@@ -12,8 +12,13 @@ gem 'sqlite3'
 gem 'chunky_png'
 gem 'oily_png'
 
-gem 'rspec'
-gem 'cucumber'
-gem 'aruba'
-gem 'simplecov', :require => false
-gem 'magic_encoding'
+group :test do
+  gem 'rspec'
+  gem 'cucumber'
+  gem 'aruba'
+end
+
+group :development do
+  gem 'simplecov', :require => false
+  gem 'magic_encoding'
+end
