@@ -8,7 +8,7 @@ Feature: Unset File Tags
     When I unset the tag "asdf" for "mmd_crazy_tags.mmd"
     Then the output should match /New tags for .*mmd_crazy_tags.mmd: sdfg, dfgh, fghj, qwer/
   
-  Scenario: Unet tags from a file with one tag
+  Scenario: Unset tags from a file with one tag
     Given the example configuration
     When I unset the tag "test" for "mmd_with_tag.mmd"
     Then the output should match /New tags for .*mmd_with_tag.mmd: no tags/
