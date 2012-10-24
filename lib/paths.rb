@@ -11,7 +11,7 @@ module Paths
       root_dir = File.expand_path("~/Library/Application Support/StickyFlag")
     when /linux/i
       require 'xdg'
-      root_dir = File.join(XDG['CONFIG_HOME'], 'stickyflag')
+      root_dir = File.join(XDG['CONFIG_HOME'].to_s, 'stickyflag')
     when /mswin|mingw/i
       root_dir = File.join(ENV['APPDATA'], 'StickyFlag')
     else
@@ -31,7 +31,7 @@ module Paths
       root_dir = File.expand_path("~/Library/Application Support/StickyFlag")
     when /linux/i
       require 'xdg'
-      root_dir = File.join(XDG['DATA_HOME'], 'stickyflag')
+      root_dir = File.join(XDG['DATA_HOME'].to_s, 'stickyflag')
     when /mswin|mingw/i
       root_dir = File.join(ENV['APPDATA'], 'StickyFlag')
     else
