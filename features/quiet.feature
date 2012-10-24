@@ -16,14 +16,33 @@ Feature: Silence Extraneous Output
     Then the output should not contain "mmd_crazy_tags.mmd"
       And the output should not contain "test2"
   
-  Scenario: Determine tag success from return value
+  Scenario: Determine quiet set tag success from return value
     Given the example configuration
     Given PENDING: figure out how to get Thor to do exit codes
     When I quietly set the tag "test2" for "mmd_crazy_tags.mmd"
     Then the exit status should be 0
   
-  Scenario: Determine tag failure from return value
+  Scenario: Determine quiet set tag failure from return value
     Given the example configuration
     Given PENDING: figure out how to get Thor to do exit codes
-    When I quietly set the tag "test2" for "nonexistent.mmd"
+    When I quietly set the tag "test" for "nonexistent.mmd"
     Then the exit status should not be 0
+
+  Scenario: Unset tags with no output at all
+    Given the example configuration
+    When I quietly unset the tag "asdf" for "mmd_crazy_tags.mmd"
+    Then the output should not contain "mmd_crazy_tags.mmd"
+      And the output should not contain "sdfg"
+  
+  Scenario: Determine quiet unset tag success from return value
+    Given the example configuration
+    Given PENDING: figure out how to get Thor to do exit codes
+    When I quietly unset the tag "asdf" for "mmd_crazy_tags.mmd"
+    Then the exit status should be 0
+  
+  Scenario: Determine quiet unset tag failure from return value
+    Given the example configuration
+    Given PENDING: figure out how to get Thor to do exit codes
+    When I quietly unset the tag "test" for "nonexistent.mmd"
+    Then the exit status should not be 0
+    

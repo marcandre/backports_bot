@@ -31,3 +31,17 @@ When /I quietly set the tag "(.*?)" for "(.*?)"$/ do |tag, filename|
     When I run `stickyflag set '#{path}' '#{tag}' --quiet`
   }
 end
+
+When /I unset the tag "(.*?)" for "(.*?)"$/ do |tag, filename|
+  path = copy_example(filename)
+  steps %Q{
+    When I run `stickyflag unset '#{path}' '#{tag}'`
+  }
+end
+
+When /I quietly unset the tag "(.*?)" for "(.*?)"$/ do |tag, filename|
+  path = copy_example(filename)
+  steps %Q{
+    When I run `stickyflag unset '#{path}' '#{tag}' --quiet`
+  }
+end
