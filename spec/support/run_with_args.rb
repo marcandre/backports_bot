@@ -1,5 +1,6 @@
+# -*- encoding : utf-8 -*-
 require 'thor'
-load File.join(File.dirname(__FILE__), '..', '..', 'bin', 'stickyflag')
+require 'stickyflag'
 
 def run_with_args(*args)
   StickyFlag.send(:dispatch, nil, args, nil, {}) do |instance|

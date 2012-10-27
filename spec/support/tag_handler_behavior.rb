@@ -4,7 +4,7 @@ shared_examples_for 'a tag handler' do
   let(:params) { [] }
   
   def file_extension
-    described_class.to_s.gsub('Tags::', '').downcase
+    described_class.to_s.gsub('StickyFlag::Tags::', '').downcase
   end
   
   def example_with_tag

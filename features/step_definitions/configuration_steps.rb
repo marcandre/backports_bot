@@ -1,13 +1,15 @@
+# -*- encoding : utf-8 -*-
 require 'rspec/expectations'
 require 'cucumber/formatter/unicode'
 require 'aruba/cucumber'
+require_relative '../../spec/support/examples'
 
 Given /a clean configuration/ do
   FileUtils.rm $paths.config_path if File.exist? $paths.config_path
 end
 
 Given /the example configuration/ do
-  path = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'spec', 'support', 'examples'))
+  path = example_root
   
   steps %Q{
     Given a clean configuration

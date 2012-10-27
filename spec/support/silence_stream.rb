@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 module Kernel
   def silence_stream(stream)
