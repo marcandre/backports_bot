@@ -1,7 +1,5 @@
 # -*- encoding : utf-8 -*-
 $KCODE = 'U' if RUBY_VERSION < "1.9.0"
-ENV['RSPEC_TESTING'] = '1'
-ENV['THOR_DEBUG'] = '1'
 
 require 'rubygems'
 require 'simplecov' unless ENV["CI"] == 'true'
