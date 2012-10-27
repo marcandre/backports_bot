@@ -2,5 +2,11 @@
 # -*- encoding : utf-8 -*-
 $KCODE = 'U' if RUBY_VERSION < "1.9.0"
 
-require 'stickyflag'
+begin
+  require 'stickyflag'
+rescue LoadError
+  require 'rubygems'
+  require 'stickyflag'
+end
+
 StickyFlag.start
