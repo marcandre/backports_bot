@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'stickyflag/tags/source_code'
 
-class StickyFlag
+module StickyFlag
   module Tags
     module TeX
       module_function

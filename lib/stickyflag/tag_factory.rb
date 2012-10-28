@@ -9,7 +9,7 @@ require 'stickyflag/tags/tex'
 require 'stickyflag/tags/c'
 require 'stickyflag/tags/mmd'
 
-class StickyFlag
+module StickyFlag
   module TagFactory
     def available_tagging_extensions
       ['.pdf', '.png', '.tex', '.c', '.cpp', '.cxx', '.c++',

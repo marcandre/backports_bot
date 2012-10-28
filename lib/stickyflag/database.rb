@@ -28,7 +28,7 @@ class RDBI::Database
   end
   
   def selects_any_rows?(*args)
-    result = execute(*args).fetch
+    result = execute(*args)
     return nil if result.nil?
     
     row_fetch = result.fetch
@@ -41,7 +41,7 @@ class RDBI::Database
   end
 end
 
-class StickyFlag
+module StickyFlag
   module Database
     def load_database
       @database.disconnect if @database

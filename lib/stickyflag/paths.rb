@@ -2,7 +2,7 @@
 require 'rbconfig'
 require 'fileutils'
 
-class StickyFlag
+module StickyFlag
   module Paths
     def config_path
       # No code coverage: only ever runs one operating system branch

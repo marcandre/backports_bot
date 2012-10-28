@@ -7,7 +7,7 @@ rescue LoadError
 end
 require 'fileutils'
 
-class StickyFlag
+module StickyFlag
   module Tags
     module PNG
       module_function

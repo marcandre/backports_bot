@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 
-class StickyFlag
+module StickyFlag
   module Version
     NUMBERS = [
       MAJOR = 0,

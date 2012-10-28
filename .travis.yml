@@ -3,7 +3,7 @@ before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -qq pdftk
 bundler_args: --without development
-script: "thor spec && thor features"
+script: "rspec spec && cucumber features"
 
 env:
     - CI=true

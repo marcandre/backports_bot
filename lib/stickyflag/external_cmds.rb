@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 
-class StickyFlag
+module StickyFlag
   module ExternalCmds
   
     EXTERNAL_CMDS = {

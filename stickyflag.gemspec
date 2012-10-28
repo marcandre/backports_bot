@@ -41,6 +41,6 @@ Gem::Specification.new do |s|
   s.default_executable = 'bin/stickyflag'
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
 
-  s.extra_rdoc_files = ['LICENSE.md', 'README.md', 'Thorfile', 'TODO.md']
+  s.extra_rdoc_files = ['LICENSE.md', 'README.md', 'Rakefile', 'TODO.md']
   s.rdoc_options = ['--charset=UTF-8']
 end

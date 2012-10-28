@@ -3,7 +3,7 @@ require 'thor'
 require 'yaml'
 require 'stickyflag/paths'
 
-class StickyFlag
+module StickyFlag
   module Configuration
     DEFAULT_CONFIG = {
       :have_pdftk => false,

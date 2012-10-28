@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'stickyflag/patches/tmpnam.rb'
 
-class StickyFlag
+module StickyFlag
   module Tags
     module MMD    
       module_function

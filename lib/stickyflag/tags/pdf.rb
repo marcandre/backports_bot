@@ -3,7 +3,7 @@ require 'thor'
 require 'open3'
 require 'stickyflag/patches/tempfile_encoding'
 
-class StickyFlag
+module StickyFlag
   module Tags
     module PDF
       module_function

@@ -8,7 +8,6 @@ require 'simplecov' unless ENV["CI"] == 'true'
 
 require 'backports'
 require 'rspec/autorun'
-require 'thor'
 require 'stickyflag'
 
 Dir['./spec/support/**/*.rb'].map { |f| require f }
