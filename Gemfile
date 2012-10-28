@@ -1,20 +1,20 @@
 source :rubygems
 
 gem 'thor'
+gem 'rake'
 
 gem 'backports'
 if RbConfig::CONFIG['target_os'] =~ /linux/i
   gem 'xdg'
 end
 
-gem 'sqlite3'
+gem 'rdbi'
+gem 'rdbi-driver-sqlite3', :platforms => [ :ruby, :mswin ]
+gem 'rdbi-driver-jdbc', :platforms => :jruby, :git => 'git://github.com/cpence/rdbi-driver-jdbc.git'
+gem 'jdbc-sqlite3', :platforms => :jruby
 
 gem 'chunky_png'
-platforms :ruby do
-  # This reimplements much of the core of chunky_png in C, for more
-  # speed, but isn't required (e.g., on JRuby)
-  gem 'oily_png', :require => false
-end
+gem 'oily_png', :platforms => [ :ruby, :mswin ]
 
 group :test do
   gem 'rspec'
@@ -23,6 +23,6 @@ group :test do
 end
 
 group :development do
-  gem 'simplecov', :require => false
+  gem 'simplecov'
   gem 'magic_encoding'
 end

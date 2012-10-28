@@ -4,7 +4,7 @@ class StickyFlag
   module Version
     NUMBERS = [
       MAJOR = 0,
-      MINOR = 1,
+      MINOR = 2,
       BUILD = 0
     ]
   end

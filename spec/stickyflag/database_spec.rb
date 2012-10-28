@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-require 'sqlite3'
 require 'stickyflag/paths'
 require 'stickyflag/configuration'
 require 'stickyflag/external_cmds'
@@ -20,34 +19,23 @@ describe 'StickyFlag::Database' do
     
     @obj.stub(:load_config!) { }
     @obj.stub(:save_config!) { }
+    @obj.stub(:database_path) { ":memory:" }
     
     @obj.find_external_cmds
-    
-    @database = SQLite3::Database.new ":memory:"
-    @obj.stub(:load_database) { 
-      @obj.instance_variable_set(:@database, @database)
-      @obj.create_tables
-    }
     @obj.load_database
+    
+    # Save this out for (lots of) later use
+    @database = @obj.instance_variable_get(:@database)
   end
   
   after(:each) do
-    @database.close
+    # We've disabled automatic cleanup, so make sure we do this
+    @database.disconnect
   end
   
   describe '.load_database' do
-    before(:each) do
-      @obj.stub(:database_path) { ":memory:" }
-      @obj.unstub(:load_database)
-    end
-    
-    it 'successfully creates a database' do
-      expect { @obj.load_database }.to_not raise_error
-    end
-    
     it 'sets the member variable' do
-      @obj.load_database
-      @obj.instance_variable_get(:@database).should be
+      @database.should be
     end
   end
   
@@ -58,7 +46,7 @@ describe 'StickyFlag::Database' do
       end
       
       it 'has some files in the database' do
-        @database.execute("select * from tagged_files").should_not be_empty
+        @database.selects_any_rows?("select * from tagged_files").should be_true
       end
       
       it 'has found the test and asdf tags' do
@@ -85,7 +73,7 @@ describe 'StickyFlag::Database' do
       end
       
       it 'has no files in the database' do
-        @database.execute("select * from tagged_files").should be_empty
+        @database.selects_any_rows?("select * from tagged_files").should be_false
       end
     end
     
@@ -120,7 +108,7 @@ describe 'StickyFlag::Database' do
       end
       
       it 'has some files in the database' do
-        @database.execute("select * from tagged_files").should_not be_empty
+        @database.selects_any_rows?("select * from tagged_files").should be_true
       end
       
       it 'has found the test and asdf tags' do
@@ -144,19 +132,19 @@ describe 'StickyFlag::Database' do
       end
       
       it "adds the record for the tagged file" do
-        file_id = @database.get_first_value("select id from file_list where file_name = ?", [ @path ])
+        file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
         file_id.should_not be_nil
         
         tag_id = @database.get_first_value("select id from tag_list where tag_name = 'asdf'")
         tag_id.should_not be_nil
         
-        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", [ file_id, tag_id ])
+        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", file_id, tag_id).fetch(:all)
         rows.should_not be_empty
         rows.count.should eq(1)
       end
       
       it "doesn't duplicate the entry for the tag" do
-        rows = @database.execute("select * from tag_list where tag_name = 'asdf'")
+        rows = @database.execute("select * from tag_list where tag_name = 'asdf'").fetch(:all)
         rows.count.should eq(1)
       end
     end
@@ -169,19 +157,19 @@ describe 'StickyFlag::Database' do
       end
       
       it "adds a new record for the new tag" do
-        rows = @database.execute("select * from tag_list where tag_name = 'zuzzax'")
+        rows = @database.execute("select * from tag_list where tag_name = 'zuzzax'").fetch(:all)
         rows.should_not be_empty
         rows.count.should eq(1)
       end
       
       it "adds the record for the tagged file" do
-        file_id = @database.get_first_value("select id from file_list where file_name = ?", [ @path ])
+        file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
         file_id.should_not be_nil
         
         tag_id = @database.get_first_value("select id from tag_list where tag_name = 'zuzzax'")
         tag_id.should_not be_nil
         
-        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", [ file_id, tag_id ])
+        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", file_id, tag_id).fetch(:all)
         rows.should_not be_empty
         rows.count.should eq(1)
       end
@@ -198,13 +186,13 @@ describe 'StickyFlag::Database' do
       it 'removes the record for the tagged file' do
         @obj.unset_database_tag(@path, 'test')
         
-        file_id = @database.get_first_value("select id from file_list where file_name = ?", [ @path ])
+        file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
         file_id.should_not be_nil
         
         tag_id = @database.get_first_value("select id from tag_list where tag_name = 'test'")
         tag_id.should_not be_nil
         
-        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", [ file_id, tag_id ])
+        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", file_id, tag_id).fetch(:all)
         rows.should be_empty
       end
     end
@@ -216,7 +204,7 @@ describe 'StickyFlag::Database' do
       end
       
       it 'removes the record for the tagged file' do        
-        file_id = @database.get_first_value("select id from file_list where file_name = ?", [ @path ])
+        file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
         file_id.should_not be_nil
         
         tag_id = @database.get_first_value("select id from tag_list where tag_name = 'qwer'")
@@ -224,7 +212,7 @@ describe 'StickyFlag::Database' do
 
         @obj.unset_database_tag(@path, 'qwer')
         
-        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", [ file_id, tag_id ])
+        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", file_id, tag_id).fetch(:all)
         rows.should be_empty
       end
       
@@ -244,15 +232,15 @@ describe 'StickyFlag::Database' do
     end
     
     it 'removes all tag records for the file' do
-      file_id = @database.get_first_value("select id from file_list where file_name = ?", [ @path ])
+      file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
       file_id.should_not be_nil
       
-      rows = @database.execute("select * from tagged_files where file = ?", [ file_id ])
+      rows = @database.execute("select * from tagged_files where file = ?", file_id).fetch(:all)
       rows.should be_empty
     end
     
     it 'removes the tag after clearing single-instance tags' do
-      rows = @database.execute("select * from tag_list where tag_name = 'qwer'")
+      rows = @database.execute("select * from tag_list where tag_name = 'qwer'").fetch(:all)
       rows.should be_empty
     end
   end

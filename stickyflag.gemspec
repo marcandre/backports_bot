@@ -5,6 +5,7 @@ Gem::Specification.new do |s|
   s.name = 'stickyflag'
   s.version = StickyFlag::VERSION
   s.date = Date.today.to_s
+  s.required_rubygems_version = Gem::Requirement.new('>= 1.3.6')
   
   s.summary = 'Tag your files, search by tags'
   s.description = "Set tags and search by them in PDF, MMD, PNG, and other file types"
@@ -13,12 +14,20 @@ Gem::Specification.new do |s|
   s.email = 'charles@charlespence.net'
   s.homepage = 'https://github.com/cpence/stickyflag'
   
-  s.add_dependency 'thor'
-  s.add_dependency 'backports'
-  s.add_dependency 'xdg'
-  s.add_dependency 'sqlite3'
-  s.add_dependency 'chunky_png'
-  s.required_rubygems_version = Gem::Requirement.new('>= 1.3.6')
+  s.add_runtime_dependency 'thor'
+  s.add_runtime_dependency 'backports'
+  s.add_runtime_dependency 'xdg'
+  s.add_runtime_dependency 'chunky_png'
+  s.add_runtime_dependency 'rdbi'
+  
+  if RUBY_PLATFORM == 'java'
+    s.platform = 'java'
+    s.add_runtime_dependency 'rdbi-driver-jdbc'
+    s.add_runtime_dependency 'jdbc-sqlite3'
+  else
+    s.add_runtime_dependency 'oily_png'
+    s.add_runtime_dependency 'rdbi-driver-sqlite3'
+  end
   
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rspec'

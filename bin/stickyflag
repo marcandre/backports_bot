@@ -1,12 +1,8 @@
 #!/usr/bin/env ruby
 # -*- encoding : utf-8 -*-
 $KCODE = 'U' if RUBY_VERSION < "1.9.0"
+require 'rubygems'
+require 'bundler/setup'
 
-begin
-  require 'stickyflag'
-rescue LoadError
-  require 'rubygems'
-  require 'stickyflag'
-end
-
+require 'stickyflag'
 StickyFlag.start

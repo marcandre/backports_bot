@@ -1,7 +1,9 @@
 # -*- encoding : utf-8 -*-
 $KCODE = 'U' if RUBY_VERSION < "1.9.0"
+ENV['RSPEC_TESTING'] = 'true'
 
 require 'rubygems'
+require 'bundler/setup'
 require 'simplecov' unless ENV["CI"] == 'true'
 
 require 'backports'
