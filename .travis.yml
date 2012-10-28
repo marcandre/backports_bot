@@ -2,7 +2,6 @@ language: ruby
 before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -qq pdftk
-bundler_args: --without development
 script: "rspec spec && cucumber features"
 
 env:
