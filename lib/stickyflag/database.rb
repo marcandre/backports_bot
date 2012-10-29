@@ -62,7 +62,6 @@ module StickyFlag
       # Do not do automatic cleanup from the RSpec test suite; this registers
       # dozens of at_exit hooks and crashes Ruby
       unless ENV['RSPEC_TESTING']
-        puts "CALLING FROM #{caller.join('\n')}"
         at_exit { @database.disconnect }
       end
     end
