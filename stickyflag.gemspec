@@ -1,18 +1,20 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/stickyflag/version', __FILE__)
+lib = File.expand_path('../lib/', __FILE__)
+$:.unshift lib unless $:.include?(lib)
+
+require 'stickyflag/version'
 
 Gem::Specification.new do |s|
   s.name = 'stickyflag'
   s.version = StickyFlag::VERSION
-  s.date = Date.today.to_s
   s.required_rubygems_version = Gem::Requirement.new('>= 1.3.6')
+  
+  s.authors = ['Charles H. Pence']
+  s.email = ['charles@charlespence.net']
+  s.homepage = 'https://github.com/cpence/stickyflag'
   
   s.summary = 'Tag your files, search by tags'
   s.description = "Set tags and search by them in PDF, MMD, PNG, and other file types"
-  
-  s.authors = ['Charles H. Pence']
-  s.email = 'charles@charlespence.net'
-  s.homepage = 'https://github.com/cpence/stickyflag'
   
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'backports'
