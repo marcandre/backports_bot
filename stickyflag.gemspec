@@ -18,15 +18,14 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'backports'
   s.add_runtime_dependency 'xdg'
   s.add_runtime_dependency 'chunky_png'
-  s.add_runtime_dependency 'rdbi'
+  s.add_runtime_dependency 'sequel'
   
   if RUBY_PLATFORM == 'java'
     s.platform = 'java'
-    s.add_runtime_dependency 'rdbi-driver-jdbc'
     s.add_runtime_dependency 'jdbc-sqlite3'
   else
+    s.add_runtime_dependency 'sqlite3'
     s.add_runtime_dependency 'oily_png'
-    s.add_runtime_dependency 'rdbi-driver-sqlite3'
   end
   
   s.add_development_dependency 'bundler'

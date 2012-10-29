@@ -46,7 +46,7 @@ describe 'StickyFlag::Database' do
       end
       
       it 'has some files in the database' do
-        @database.selects_any_rows?("select * from tagged_files").should be_true
+        @database[:tagged_files].should_not be_empty
       end
       
       it 'has found the test and asdf tags' do
@@ -73,7 +73,7 @@ describe 'StickyFlag::Database' do
       end
       
       it 'has no files in the database' do
-        @database.selects_any_rows?("select * from tagged_files").should be_false
+        @database[:tagged_files].should be_empty
       end
     end
     
@@ -108,7 +108,7 @@ describe 'StickyFlag::Database' do
       end
       
       it 'has some files in the database' do
-        @database.selects_any_rows?("select * from tagged_files").should be_true
+        @database[:tagged_files].should_not be_empty
       end
       
       it 'has found the test and asdf tags' do
@@ -132,20 +132,20 @@ describe 'StickyFlag::Database' do
       end
       
       it "adds the record for the tagged file" do
-        file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
+        file_id = @database[:file_list].where(:file_name => @path).get(:id)
         file_id.should_not be_nil
         
-        tag_id = @database.get_first_value("select id from tag_list where tag_name = 'asdf'")
+        tag_id = @database[:tag_list].where(:tag_name => 'asdf').get(:id)
         tag_id.should_not be_nil
         
-        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", file_id, tag_id).fetch(:all)
-        rows.should_not be_empty
-        rows.count.should eq(1)
+        ds = @database[:tagged_files].where(:file => file_id).and(:tag => tag_id)
+        ds.should_not be_empty
+        ds.count.should eq(1)
       end
       
       it "doesn't duplicate the entry for the tag" do
-        rows = @database.execute("select * from tag_list where tag_name = 'asdf'").fetch(:all)
-        rows.count.should eq(1)
+        ds = @database[:tag_list].where(:tag_name => 'asdf')
+        ds.count.should eq(1)
       end
     end
     
@@ -157,21 +157,21 @@ describe 'StickyFlag::Database' do
       end
       
       it "adds a new record for the new tag" do
-        rows = @database.execute("select * from tag_list where tag_name = 'zuzzax'").fetch(:all)
-        rows.should_not be_empty
-        rows.count.should eq(1)
+        ds = @database[:tag_list].where(:tag_name => 'zuzzax')
+        ds.should_not be_empty
+        ds.count.should eq(1)
       end
       
       it "adds the record for the tagged file" do
-        file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
+        file_id = @database[:file_list].where(:file_name => @path).get(:id)
         file_id.should_not be_nil
         
-        tag_id = @database.get_first_value("select id from tag_list where tag_name = 'zuzzax'")
+        tag_id = @database[:tag_list].where(:tag_name => 'zuzzax').get(:id)
         tag_id.should_not be_nil
         
-        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", file_id, tag_id).fetch(:all)
-        rows.should_not be_empty
-        rows.count.should eq(1)
+        ds = @database[:tagged_files].where(:file => file_id).and(:tag => tag_id)
+        ds.should_not be_empty
+        ds.count.should eq(1)
       end
     end
   end
@@ -186,14 +186,14 @@ describe 'StickyFlag::Database' do
       it 'removes the record for the tagged file' do
         @obj.unset_database_tag(@path, 'test')
         
-        file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
+        file_id = @database[:file_list].where(:file_name => @path).get(:id)
         file_id.should_not be_nil
         
-        tag_id = @database.get_first_value("select id from tag_list where tag_name = 'test'")
+        tag_id = @database[:tag_list].where(:tag_name => 'test').get(:id)
         tag_id.should_not be_nil
         
-        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", file_id, tag_id).fetch(:all)
-        rows.should be_empty
+        ds = @database[:tagged_files].where(:file => file_id).and(:tag => tag_id)
+        ds.should be_empty
       end
     end
     
@@ -204,22 +204,22 @@ describe 'StickyFlag::Database' do
       end
       
       it 'removes the record for the tagged file' do        
-        file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
+        file_id = @database[:file_list].where(:file_name => @path).get(:id)
         file_id.should_not be_nil
         
-        tag_id = @database.get_first_value("select id from tag_list where tag_name = 'qwer'")
+        tag_id = @database[:tag_list].where(:tag_name => 'qwer').get(:id)
         tag_id.should_not be_nil
 
         @obj.unset_database_tag(@path, 'qwer')
         
-        rows = @database.execute("select * from tagged_files where file = ? and tag = ?", file_id, tag_id).fetch(:all)
-        rows.should be_empty
+        ds = @database[:tagged_files].where(:file => file_id).and(:tag => tag_id)
+        ds.should be_empty
       end
       
       it 'removes the record of the tag' do
         @obj.unset_database_tag(@path, 'qwer')
-        tag_id = @database.get_first_value("select id from tag_list where tag_name = 'qwer'")
-        tag_id.should be_nil
+        ds = @database[:tag_list].where(:tag_name => 'qwer')
+        ds.should be_empty
       end
     end
   end
@@ -232,16 +232,16 @@ describe 'StickyFlag::Database' do
     end
     
     it 'removes all tag records for the file' do
-      file_id = @database.get_first_value("select id from file_list where file_name = ?", @path)
+      file_id = @database[:file_list].where(:file_name => @path).get(:id)
       file_id.should_not be_nil
       
-      rows = @database.execute("select * from tagged_files where file = ?", file_id).fetch(:all)
-      rows.should be_empty
+      ds = @database[:tagged_files].where(:file => file_id)
+      ds.should be_empty
     end
     
     it 'removes the tag after clearing single-instance tags' do
-      rows = @database.execute("select * from tag_list where tag_name = 'qwer'").fetch(:all)
-      rows.should be_empty
+      ds = @database[:tag_list].where(:tag_name => 'qwer')
+      ds.should be_empty
     end
   end
   

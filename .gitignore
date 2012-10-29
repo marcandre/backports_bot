@@ -1,3 +1,7 @@
+Gemfile.lock
+
+pkg
 spec/coverage
 tmp
+
 *.gem
