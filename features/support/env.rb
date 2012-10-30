@@ -10,6 +10,11 @@ require 'stickyflag'
 require 'fileutils'
 require_relative './cukegem'
 
+# JRuby is slow to start up
+Before do
+  @aruba_timeout_seconds = 10
+end
+
 # Back up and restore the user's configuration and database
 $backup_db = File.tmpnam('.sqlite')
 $backup_config = File.tmpnam('.yml')
