@@ -1,10 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'thread'
 require 'sequel'
-if RUBY_PLATFORM == 'java'
-  require 'jdbc/sqlite3'
-  org.sqlite.JDBC
-end
 
 module StickyFlag
   module Database
