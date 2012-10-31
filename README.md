@@ -3,7 +3,7 @@
 
 *file tagging for everyone*
 
-[![Build Status](https://secure.travis-ci.org/cpence/stickyflag.png)](http://travis-ci.org/cpence/stickyflag)[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/cpence/stickyflag)
+[![Build Status](https://secure.travis-ci.org/cpence/stickyflag.png)](http://travis-ci.org/cpence/stickyflag) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/cpence/stickyflag)
 
 ## What does it do?
 
