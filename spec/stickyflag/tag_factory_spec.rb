@@ -33,70 +33,11 @@ describe 'StickyFlag::TagFactory' do
   end
   
   describe '.available_tagging_extensions' do
-    # Some extensions require the presence of actual, good files, not
-    # just empty shells, so we can't test them in this way.  Skip those.
-    CANNOT_TEST = [ '.pdf', '.png' ]
-    
-    it 'should call get for every good extension' do
-      (@obj.available_tagging_extensions - CANNOT_TEST).each do |ext|
-        file = Tempfile.new_with_encoding(['ext', ext])
-        file.puts('test')        
-        file.close
-        
-        expect { @obj.get_tags_for(file.path) }.to_not raise_error
-        file.unlink
-      end
-    end
-    
-    it 'should call get for other extensions' do
-      CANNOT_TEST.each do |ext|
-        path = copy_example "#{ext[1..-1]}_with_tag#{ext}"
-        expect { @obj.clear_tags_for(path) }.to_not raise_error
-        File.unlink(path)
-      end
-    end
-
-    it 'should call set/unset for every good extension' do
-      (@obj.available_tagging_extensions - CANNOT_TEST).each do |ext|
-        file = Tempfile.new_with_encoding(['ext', ext])
-        file.puts('test')        
-        file.close
-        
-        expect { 
-          @obj.set_tag_for(file.path, 'test')
-          @obj.unset_tag_for(file.path, 'test')
-          }.to_not raise_error
-        file.unlink
-      end
-    end
-    
-    it 'should call set/unset for other extensions' do
-      CANNOT_TEST.each do |ext|
-        path = copy_example "#{ext[1..-1]}_with_tag#{ext}"
-        expect {
-          @obj.set_tag_for(path, 'test2')
-          @obj.unset_tag_for(path, 'test2')
-          }.to_not raise_error
-        File.unlink(path)
-      end
-    end
-    
-    it 'should call clear for every good extension' do
-      (@obj.available_tagging_extensions - CANNOT_TEST).each do |ext|
-        file = Tempfile.new_with_encoding(['ext', ext])
-        file.puts('test')        
-        file.close
-        
-        expect { @obj.clear_tags_for(file.path) }.to_not raise_error
-        file.unlink
-      end
-    end
-    
-    it 'should call clear for other extensions' do
-      CANNOT_TEST.each do |ext|
-        path = copy_example "#{ext[1..-1]}_with_tag#{ext}"
-        expect { @obj.clear_tags_for(path) }.to_not raise_error
-        File.unlink(path)
+    it 'should be able to call through to a class method for every good extension' do
+      @obj.available_tagging_extensions.each do |ext|
+        # This is a bit of a hack -- call TagClass::respond_to?, which takes
+        # one argument
+        expect { @obj.call_tag_method("test#{ext}", :respond_to?) }.to_not raise_error
       end
     end
   end
