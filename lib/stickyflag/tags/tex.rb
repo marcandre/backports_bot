@@ -5,6 +5,10 @@ module StickyFlag
   module Tags
     module TeX
       module_function
+      
+      def extensions
+        [ '.tex' ]
+      end
     
       def comment_line_regex
         /\A% .*/

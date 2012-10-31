@@ -11,6 +11,10 @@ module StickyFlag
   module Tags
     module PNG
       module_function
+      
+      def extensions
+        [ '.png' ]
+      end
     
       def get(file_name)
         image = ChunkyPNG::Image.from_file(file_name)

@@ -5,6 +5,10 @@ module StickyFlag
   module Tags
     module C
       module_function
+      
+      def extensions
+        [ '.c', '.cpp', '.cxx', '.c++', '.h', '.hpp', '.hxx' ]
+      end
     
       def comment_line_regex
         /\A\/\/ .*/

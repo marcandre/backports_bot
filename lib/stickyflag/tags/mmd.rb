@@ -5,6 +5,10 @@ module StickyFlag
   module Tags
     module MMD    
       module_function
+      
+      def extensions
+        [ '.md', '.mmd', '.markdown', '.text' ]
+      end
     
       # We duplicate the source-code module here because we want to have
       # cute support for the indentation of tag contents in MMD, and because

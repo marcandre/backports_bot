@@ -7,6 +7,10 @@ module StickyFlag
   module Tags
     module PDF
       module_function
+      
+      def extensions
+        [ '.pdf' ]
+      end
     
       def get(file_name, pdftk_path = 'pdftk')
         stdout_str = ''
