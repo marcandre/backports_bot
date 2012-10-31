@@ -3,6 +3,8 @@
 
 *file tagging for everyone*
 
+[![Build Status](https://secure.travis-ci.org/cpence/stickyflag.png)](http://travis-ci.org/cpence/stickyflag)[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/cpence/stickyflag)
+
 ## What does it do?
 
 Filesystems are great.  Most of our file organization tasks can be performed by arranging things in hierarchical directories.  But every once in a while, you have an organization problem that can really only be resolved with categories that *cut across* these hierarchical structures.  What if you want everything related to Project X, including its code, meeting notes about it, photos you took of it, and so on?  The code is in your development directory, meeting notes in a meetings directory, and photos in an images directory.
