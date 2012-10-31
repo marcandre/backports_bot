@@ -24,11 +24,13 @@ StickyFlag can currently tag:
 * MultiMarkdown files
 * PDF files (with `pdftk` installed; see below)
 * PNG files
+* Matroska video files
 * Source code (C/C++, TeX)
 
 ## What else does it need?
 
-If you're going to tag PDF files, you need to install [pdftk,](http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) which is available for Windows, Mac OS X, and Linux (licensed under the GPL).
+* If you're going to tag PDF files, you need to install [pdftk,](http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) which is available for all platforms (licensed under the GPL).
+* If you're going to tag MKV files, you need to install [mkvtoolnix,](http://www.bunkus.org/videotools/mkvtoolnix/) which is available for all platforms (licensed under the GPL).
 
 ## How do I get it?
 

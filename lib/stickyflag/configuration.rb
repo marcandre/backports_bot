@@ -8,6 +8,11 @@ module StickyFlag
     DEFAULT_CONFIG = {
       :have_pdftk => false,
       :pdftk_path => '',
+      :have_mkvextract => false,
+      :mkvextract_path => '',
+      :have_mkvpropedit => false,
+      :mkvpropedit_path => '',
+      
       :root => ''
     }
   
@@ -15,7 +20,7 @@ module StickyFlag
       @configuration ||= DEFAULT_CONFIG.clone
   
       unless @configuration.keys.include?(key.to_sym)
-        raise Thor::Error.new('ERROR: Invalid configuration key') 
+        raise Thor::Error.new("ERROR: Invalid configuration key (#{key.to_s})") 
       end
     
       @configuration[key.to_sym]
@@ -25,7 +30,7 @@ module StickyFlag
       @configuration ||= DEFAULT_CONFIG.clone
   
       unless @configuration.keys.include?(key.to_sym)
-        raise Thor::Error.new('ERROR: invalid configuration key')
+        raise Thor::Error.new("ERROR: invalid configuration key (#{key.to_s})")
       end
     
       @configuration[key.to_sym] = value
@@ -51,6 +56,9 @@ module StickyFlag
       file_name = config_path
       if File.file? file_name
         @configuration = YAML::load(File.open(file_name, 'r:UTF-8'))
+        
+        # Merge with the default to pick up new keys
+        @configuration = DEFAULT_CONFIG.merge(@configuration)
       end
     end
   

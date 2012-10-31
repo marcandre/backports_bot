@@ -24,11 +24,14 @@ module StickyFlag
     
     def call_tag_method(file_name, method, *args)
       extension = File.extname file_name
-      # FIXME: HACK: HOW TO DO THIS GENERALLY?
-      args << get_config(:pdftk_path) if extension == '.pdf'
       
       TAG_MODULES.each do |mod|
-        if mod.send(:extensions).include? extension          
+        if mod.send(:extensions).include? extension  
+          if mod.respond_to?(:config_values)
+            config_values = mod.send(:config_values)
+            config_values.each { |val| args << get_config(val) }
+          end
+                  
           return mod.send(method, file_name, *args)
         end
       end

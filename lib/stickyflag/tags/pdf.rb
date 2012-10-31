@@ -11,6 +11,9 @@ module StickyFlag
       def extensions
         [ '.pdf' ]
       end
+      def config_values
+        [ :pdftk_path ]
+      end
     
       def get(file_name, pdftk_path = 'pdftk')
         stdout_str = ''
@@ -51,13 +54,8 @@ module StickyFlag
       
         tags
       end
-    
-      def set(file_name, tag, pdftk_path = 'pdftk')
-        tags = get(file_name, pdftk_path)
-        return if tags.include? tag
       
-        tags << tag
-      
+      def write_tags_to(file_name, tags, pdftk_path = 'pdftk')
         info = Tempfile.new_with_encoding ['sfpdftag', '.txt']
         begin
           info.write("InfoKey: X-StickyFlag-Flags\n")
@@ -65,15 +63,24 @@ module StickyFlag
           info.close
         
           outpath = File.tmpnam('.pdf')
-          ret = system(pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath)
+          ret = system(pdftk_path, file_name, 'update_info', info.path, 'output', outpath)
           unless ret == true
-            raise Thor::Error.new("ERROR: Failed to set tag for #{file_name}; pdftk call failed")
+            raise Thor::Error.new("ERROR: Failed to write tag for #{file_name}; pdftk call failed")
           end
           
           FileUtils.mv outpath, file_name
         ensure
           info.unlink
         end
+      end
+    
+      def set(file_name, tag, pdftk_path = 'pdftk')
+        tags = get(file_name, pdftk_path)
+        return if tags.include? tag
+      
+        tags << tag
+        
+        write_tags_to(file_name, tags, pdftk_path)
       end
 
       def unset(file_name, tag, pdftk_path = 'pdftk')
@@ -81,42 +88,12 @@ module StickyFlag
         return unless tags.include? tag
       
         tags.delete(tag)
-      
-        info = Tempfile.new_with_encoding ['sfpdftag', '.txt']
-        begin
-          info.write("InfoKey: X-StickyFlag-Flags\n")
-          info.write("InfoValue: #{tags.join(', ')}\n")
-          info.close
         
-          outpath = File.tmpnam('.pdf')
-          ret = system(pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath)
-          unless ret == true
-            raise Thor::Error.new("ERROR: Failed to unset tag for #{file_name}; pdftk call failed")
-          end
-          
-          FileUtils.mv outpath, file_name
-        ensure
-          info.unlink
-        end
+        write_tags_to(file_name, tags, pdftk_path)
       end
 
       def clear(file_name, pdftk_path = 'pdftk')
-        info = Tempfile.new_with_encoding ['sfpdftag', '.txt']
-        begin
-          info.write("InfoKey: X-StickyFlag-Flags\n")
-          info.write("InfoValue: \n")
-          info.close
-        
-          outpath = File.tmpnam('.pdf')
-          ret = system(pdftk_path, file_name.to_s, 'update_info', info.path, 'output', outpath)
-          unless ret == true
-            raise Thor::Error.new("ERROR: Failed to clear tags for #{file_name}; pdftk call failed")
-          end
-          
-          FileUtils.mv outpath, file_name
-        ensure
-          info.unlink
-        end
+        write_tags_to(file_name, [], pdftk_path)
       end
     end
   end

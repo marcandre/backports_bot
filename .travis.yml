@@ -1,7 +1,7 @@
 language: ruby
 before_install:
     - sudo apt-get update -qq
-    - sudo apt-get install -qq pdftk
+    - sudo apt-get install -qq pdftk mkvtoolnix
 script: "bundle exec rake"
 
 env:

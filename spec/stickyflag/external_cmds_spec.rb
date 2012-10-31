@@ -51,7 +51,7 @@ describe 'StickyFlag::ExternalCmds' do
       end
       
       it 'outputs a warning message' do
-        @obj.should_receive(:say_status).with(:warning, kind_of(String), kind_of(Symbol))
+        @obj.should_receive(:say_status).with(:warning, kind_of(String), kind_of(Symbol)).at_least(:once)
         @obj.find_external_cmds
       end
     end
@@ -81,8 +81,8 @@ describe 'StickyFlag::ExternalCmds' do
       end
       
       it 'should not print any messages' do
-        @obj.should_not_receive(:say)
-        @obj.should_not_receive(:say_status)
+        @obj.should_not_receive(:say).with(/pdftk/)
+        @obj.should_not_receive(:say_status).with(:warning, /pdftk/, kind_of(Symbol))
         @obj.find_external_cmds
       end
     end
@@ -109,7 +109,7 @@ describe 'StickyFlag::ExternalCmds' do
       
       it 'prints out an error message' do
         @obj.stub(:say_status) {}
-        @obj.should_receive(:say_status).with(:error, kind_of(String), kind_of(Symbol))
+        @obj.should_receive(:say_status).with(:error, /pdftk/, kind_of(Symbol))
         @obj.find_external_cmds
       end
     end
@@ -136,7 +136,7 @@ describe 'StickyFlag::ExternalCmds' do
       
       it 'prints out an error message' do
         @obj.stub(:say_status) {}
-        @obj.should_receive(:say_status).with(:error, kind_of(String), kind_of(Symbol))
+        @obj.should_receive(:say_status).with(:error, /pdftk/, kind_of(Symbol))
         @obj.find_external_cmds
       end
     end
@@ -166,8 +166,8 @@ describe 'StickyFlag::ExternalCmds' do
       end
       
       it 'should not print any messages' do
-        @obj.should_not_receive(:say)
-        @obj.should_not_receive(:say_status)
+        @obj.should_not_receive(:say).with(/pdftk/)
+        @obj.should_not_receive(:say_status).with(:warning, /pdftk/, kind_of(Symbol))
         @obj.find_external_cmds
       end
     end
