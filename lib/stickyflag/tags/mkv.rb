@@ -55,7 +55,11 @@ module StickyFlag
           XML
         end
         
-        Nokogiri::XML(stdout_str)
+        # Strip off newlines and BOM, these wreak havoc on the Java XML parser,
+        # which considers them content before the prolog
+        stdout_str.strip!.gsub!("\xEF\xBB\xBF".force_encoding("UTF-8"), '')
+        
+        Nokogiri::XML(stdout_str)        
       end
       
       def get_stickyflag_root(xml_doc)
@@ -92,8 +96,7 @@ module StickyFlag
         tag_tag = get_stickyflag_root(xml_doc)
         if tag_tag.nil?
           # Should never happen!
-          puts "ERROR TAG TAG NIL: #{xml_doc.to_xml}"
-          return nil
+          raise Thor::Error.new("INTERNAL ERROR: Failed to find the StickyFlag tag root in MKV XML")
         end
         
         tag_tag.at_xpath("Simple[Name = 'X_STICKYFLAG_FLAGS']/String")
@@ -148,12 +151,6 @@ module StickyFlag
         else
           # No tag, add it
           root = get_stickyflag_root(xml_doc)
-          if root.nil?
-            # This should never happen...
-            puts "ROOT NIL: #{xml_doc.to_xml}"
-            return
-          end
-          
           simple_tag = Nokogiri::XML::Node.new 'Simple', xml_doc
           
           name_tag = Nokogiri::XML::Node.new 'Name', xml_doc
