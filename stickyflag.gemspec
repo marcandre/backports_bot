@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
   end
   
   s.add_development_dependency 'bundler'
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'cucumber'
   s.add_development_dependency 'aruba'

@@ -2,7 +2,7 @@ language: ruby
 before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -qq pdftk
-script: "bundle exec rspec && ($NOT_JRUBY && bundle exec cucumber)"
+script: "bundle exec rake"
 
 env:
     - CI=true
@@ -10,11 +10,4 @@ rvm:
     - 1.9.3
     - 1.8.7
     - ree
-gemfile: Gemfile
-env:
-    - NOT_JRUBY=true
-
-matrix:
-    include:
-        - rvm: jruby-19mode
-          env: NOT_JRUBY=false
+    - jruby-19mode
