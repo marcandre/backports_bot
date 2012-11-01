@@ -5,7 +5,7 @@ module StickyFlag
     NUMBERS = [
       MAJOR = 0,
       MINOR = 3,
-      BUILD = 2
+      BUILD = 3
     ]
   end
   VERSION = Version::NUMBERS.join('.')
