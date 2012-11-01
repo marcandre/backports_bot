@@ -40,11 +40,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'magic_encoding'
 
   s.files = `git ls-files -- bin/* lib/*`.split("\n")
-  s.files |= ['Gemfile', 'stickyflag.gemspec', 'Rakefile', 'LICENSE.md', 'README.md', 'TODO.md']
+  s.files |= ['Gemfile', 'stickyflag.gemspec', 'Rakefile', 'LICENSE.md', 'README.md', 'TODO.md', 'CHANGELOG.md']
   
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.default_executable = 'bin/stickyflag'
 
-  s.extra_rdoc_files = ['Rakefile', 'LICENSE.md', 'README.md', 'TODO.md']
+  s.extra_rdoc_files = ['Rakefile', 'LICENSE.md', 'README.md', 'TODO.md', 'CHANGELOG.md']
   s.rdoc_options = ['--charset=UTF-8']
 end
