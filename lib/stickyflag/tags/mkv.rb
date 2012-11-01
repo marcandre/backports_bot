@@ -21,7 +21,7 @@ module StickyFlag
         stderr_str = ''
       
         begin
-          Open3.popen3("#{mkvextract_path} tags #{file_name} -q") do |i, o, e, t|
+          Open3.popen3("#{mkvextract_path} tags \"#{file_name}\" -q") do |i, o, e, t|
             out_reader = Thread.new { o.read }
             err_reader = Thread.new { e.read }
             i.close

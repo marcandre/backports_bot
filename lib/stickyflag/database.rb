@@ -75,7 +75,7 @@ module StickyFlag
         end
         
         # Don't record files in the DB that have no tags
-        next if tags.empty?
+        next if tags.nil? || tags.empty?
       
         file_id = get_file_id file      
         tags.each do |tag|
