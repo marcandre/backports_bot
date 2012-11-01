@@ -7,6 +7,7 @@ require 'stickyflag/tags/png'
 require 'stickyflag/tags/tex'
 require 'stickyflag/tags/c'
 require 'stickyflag/tags/mmd'
+require 'stickyflag/tags/mkv'
 
 module StickyFlag
   module TagFactory
