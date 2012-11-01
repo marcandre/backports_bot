@@ -1,3 +1,4 @@
 # TODO
 
-- Add tag handlers: JPEG, MMD
+- Add tag handlers: JPEG
+- Fix the exit codes for --quiet
