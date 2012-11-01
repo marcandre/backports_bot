@@ -34,10 +34,19 @@ describe 'StickyFlag::TagFactory' do
   
   describe '.available_tagging_extensions' do
     it 'should be able to call through to a class method for every good extension' do
+      # Add a test method to each of these classes that eats all its args
+      StickyFlag::Tags.constants.map { |sym| 
+        StickyFlag::Tags.const_get(sym) 
+      }.select { |const| 
+        const.is_a?(Module) && const.respond_to?(:extensions)
+      }.each do |klass|
+        klass.send(:define_method, :eat_all_args) do |*args|
+        end
+        klass.send(:module_function, :eat_all_args)
+      end
+      
       @obj.available_tagging_extensions.each do |ext|
-        # This is a bit of a hack -- call TagClass::respond_to?, which takes
-        # one argument
-        expect { @obj.call_tag_method("test#{ext}", :respond_to?) }.to_not raise_error
+        expect { @obj.call_tag_method("test#{ext}", :eat_all_args) }.to_not raise_error
       end
     end
   end
