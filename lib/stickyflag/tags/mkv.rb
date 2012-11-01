@@ -57,7 +57,9 @@ module StickyFlag
         
         # Strip off newlines and BOM, these wreak havoc on the Java XML parser,
         # which considers them content before the prolog
-        stdout_str.strip!.gsub!("\xEF\xBB\xBF".force_encoding("UTF-8"), '')
+        bom = "\xEF\xBB\xBF"
+        bom.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
+        stdout_str.strip!.gsub!(bom, '')
         
         Nokogiri::XML(stdout_str)        
       end
