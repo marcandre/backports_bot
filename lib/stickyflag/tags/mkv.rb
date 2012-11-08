@@ -1,8 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'thor'
-require 'open4'
 require 'nokogiri'
-require 'stickyflag/patches/capture4'
+require 'stickyflag/patches/capture2'
 require 'stickyflag/patches/tempfile_encoding'
 
 module StickyFlag
@@ -23,7 +22,7 @@ module StickyFlag
         status = nil
       
         begin
-          stdout_str, stderr_str, status = Open4.capture4 "#{mkvextract_path} tags \"#{file_name}\" -q"
+          stdout_str, status = IO.capture2 "#{mkvextract_path} tags \"#{file_name}\" -q"
         rescue Exception
           raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; mkvextract call failed")
         end
