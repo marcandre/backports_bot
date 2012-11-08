@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'backports'
+  s.add_runtime_dependency 'open4'
   s.add_runtime_dependency 'xdg'
   s.add_runtime_dependency 'nokogiri'
   s.add_runtime_dependency 'chunky_png'

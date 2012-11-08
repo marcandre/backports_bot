@@ -1,7 +1,8 @@
 # -*- encoding : utf-8 -*-
 require 'thor'
-require 'open3'
+require 'open4'
 require 'nokogiri'
+require 'stickyflag/patches/capture4'
 require 'stickyflag/patches/tempfile_encoding'
 
 module StickyFlag
@@ -19,22 +20,14 @@ module StickyFlag
       def get_tag_xml(file_name, mkvextract_path = 'mkvextract', mkvpropedit_path = 'mkvpropedit')
         stdout_str = ''
         stderr_str = ''
+        status = nil
       
         begin
-          Open3.popen3("#{mkvextract_path} tags \"#{file_name}\" -q") do |i, o, e, t|
-            out_reader = Thread.new { o.read }
-            err_reader = Thread.new { e.read }
-            i.close
-            stdout_str = out_reader.value
-            stderr_str = err_reader.value
-
-            stdout_str.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
-            stderr_str.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
-          end
+          stdout_str, stderr_str, status = Open4.capture4 "#{mkvextract_path} tags \"#{file_name}\" -q"
         rescue Exception
           raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; mkvextract call failed")
         end
-        if stderr_str.start_with?("Error: ") || stderr_str.include?("Errno::ENOENT") || stdout_str.start_with?("Error: ")
+        if !status.success? || stderr_str.start_with?("Error: ") || stderr_str.include?("Errno::ENOENT") || stdout_str.start_with?("Error: ")
           raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; mkvextract call failed")
         end
         

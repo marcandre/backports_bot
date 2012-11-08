@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'thor'
-require 'open3'
+require 'open4'
+require 'stickyflag/patches/capture4'
 require 'stickyflag/patches/tempfile_encoding'
 
 module StickyFlag
@@ -18,22 +19,14 @@ module StickyFlag
       def get(file_name, pdftk_path = 'pdftk')
         stdout_str = ''
         stderr_str = ''
+        status = nil
       
         begin
-          Open3.popen3(pdftk_path, file_name.to_s, 'dump_data_utf8') do |i, o, e, t|
-            out_reader = Thread.new { o.read }
-            err_reader = Thread.new { e.read }
-            i.close
-            stdout_str = out_reader.value
-            stderr_str = err_reader.value
-
-            stdout_str.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
-            stderr_str.force_encoding("UTF-8") if RUBY_VERSION >= "1.9.0"
-          end
-        rescue Exception
+          stdout_str, stderr_str, status = Open4.capture4 "#{pdftk_path} \"#{file_name}\" dump_data_utf8"
+        rescue Exception => e
           raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
         end
-        if stderr_str.start_with?("Error: ") || stderr_str.include?("Errno::ENOENT")
+        if !status.success? || stderr_str.start_with?("Error: ") || stderr_str.include?("Errno::ENOENT")
           raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
         end
       
