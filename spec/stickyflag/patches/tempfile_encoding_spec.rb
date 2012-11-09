@@ -7,8 +7,8 @@ describe 'Tempfile' do
       f = Tempfile.new_with_encoding 'asdf'
       f.should be
       
-      f.unlink
       f.close
+      f.unlink
     end
     
     # JRuby <1.7.0 implements Ruby 1.9 but doesn't follow the spec for Tempfile
@@ -18,8 +18,8 @@ describe 'Tempfile' do
         f.external_encoding.should be
         f.external_encoding.name.should eq('UTF-8')
         
-        f.unlink
         f.close
+        f.unlink
       end
     end
   end

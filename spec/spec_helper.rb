@@ -4,7 +4,11 @@ ENV['RSPEC_TESTING'] = 'true'
 
 require 'rubygems'
 require 'bundler/setup'
-require 'simplecov' unless ENV["CI"] == 'true'
+
+ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : 'ruby'
+if ENV["CI"] != true && ruby_engine == 'ruby' && RUBY_VERSION >= '1.9.0'
+  require 'simplecov'
+end
 
 require 'backports'
 require 'rspec/autorun'
