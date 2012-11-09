@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'thor'
-require 'stickyflag/patches/capture2'
+require 'stickyflag/patches/capture3'
 require 'stickyflag/patches/tempfile_encoding'
 
 module StickyFlag
@@ -21,9 +21,9 @@ module StickyFlag
         status = nil
       
         begin
-          stdout_str, status = IO.capture2 "#{pdftk_path} \"#{file_name}\" dump_data_utf8"
-        rescue Exception => e
-          raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed #{e.inspect}")
+          stdout_str, stderr_str, status = StickyFlag.capture3 pdftk_path, file_name, 'dump_data_utf8'
+        rescue Exception
+          raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
         end
         if !status.success? || stderr_str.start_with?("Error: ") || stderr_str.include?("Errno::ENOENT")
           raise Thor::Error.new("ERROR: Failed to get tags for #{file_name}; pdftk call failed")
