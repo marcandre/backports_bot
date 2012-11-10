@@ -1,4 +1,5 @@
+--format Fuubar
+--color
 --require thor
 --require spec_helper
---colour
 --order random

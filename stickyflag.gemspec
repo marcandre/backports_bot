@@ -35,13 +35,14 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'fuubar'
   s.add_development_dependency 'cucumber'
   s.add_development_dependency 'aruba'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'magic_encoding'
 
   s.files = `git ls-files -- bin/* lib/*`.split("\n")
-  s.files |= ['Gemfile', 'stickyflag.gemspec', 'Rakefile', 'LICENSE.md', 'README.md', 'TODO.md', 'CHANGELOG.md']
+  s.files |= ['Gemfile', 'stickyflag.gemspec', 'Rakefile', 'LICENSE.md', 'README.md', 'TODO.md', 'CHANGELOG.md', '.rspec', '.simplecov']
   
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.default_executable = 'bin/stickyflag'
