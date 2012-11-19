@@ -16,7 +16,7 @@ module StickyFlag
         [ '.jpg', '.jpeg' ]
       end
       def config_values
-        [ ':exiftool_path' ]
+        [ :exiftool_path ]
       end
     
       def get(file_name, exiftool_path = 'exiftool')
