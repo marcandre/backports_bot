@@ -1,7 +1,7 @@
 language: ruby
 before_install:
     - sudo apt-get update -qq
-    - sudo apt-get install -qq pdftk mkvtoolnix
+    - sudo apt-get install -qq pdftk mkvtoolnix libimage-exiftool-perl
 script: "bundle exec rake"
 
 env:

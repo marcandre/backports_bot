@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'open4'
   s.add_runtime_dependency 'nokogiri'
   s.add_runtime_dependency 'chunky_png'
+  s.add_runtime_dependency 'mini_exiftool'
   s.add_runtime_dependency 'sequel'
   
   if RUBY_PLATFORM == 'java'

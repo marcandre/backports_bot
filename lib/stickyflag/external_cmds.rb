@@ -6,7 +6,8 @@ module StickyFlag
     EXTERNAL_CMDS = {
       'pdftk' => 'read and write PDF tags',
       'mkvextract' => 'read MKV tags',
-      'mkvpropedit' => 'write MKV tags'
+      'mkvpropedit' => 'write MKV tags',
+      'exiftool' => 'read and write JPEG tags'
     }
   
     def find_external_cmds

@@ -2,13 +2,14 @@
 require 'thor'
 require 'pathname'
 require 'backports'
+require 'stickyflag/tags/c'
+require 'stickyflag/tags/html'
+require 'stickyflag/tags/jpg'
+require 'stickyflag/tags/mkv'
+require 'stickyflag/tags/mmd'
 require 'stickyflag/tags/pdf'
 require 'stickyflag/tags/png'
 require 'stickyflag/tags/tex'
-require 'stickyflag/tags/c'
-require 'stickyflag/tags/mmd'
-require 'stickyflag/tags/mkv'
-require 'stickyflag/tags/html'
 
 module StickyFlag
   module TagFactory

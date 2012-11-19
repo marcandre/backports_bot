@@ -12,6 +12,8 @@ module StickyFlag
       :mkvextract_path => '',
       :have_mkvpropedit => false,
       :mkvpropedit_path => '',
+      :have_exiftool => false,
+      :exiftool_path => '',
       
       :root => ''
     }
