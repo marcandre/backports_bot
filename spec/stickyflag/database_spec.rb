@@ -65,7 +65,7 @@ describe 'StickyFlag::Database' do
         @dir = File.tmpnam('.dir')
         Dir.mkdir(@dir)
         
-        @obj.update_database_from_files(@dir)
+        @obj.update_database_from_files [@dir]
       end
       
       after(:each) do
@@ -93,18 +93,18 @@ describe 'StickyFlag::Database' do
       end
       
       it 'does not throw an exception' do
-        expect { @obj.update_database_from_files(@dir) }.to_not raise_error
+        expect { @obj.update_database_from_files([@dir]) }.to_not raise_error
       end
       
       it 'prints a warning' do
         @obj.should_receive(:say_status).with(:warning, kind_of(String), kind_of(Symbol))
-        @obj.update_database_from_files(@dir)
+        @obj.update_database_from_files([@dir])
       end
     end
     
     context 'with a full directory' do
       before(:each) do
-        @obj.update_database_from_files(example_root)
+        @obj.update_database_from_files([example_root])
       end
       
       it 'has some files in the database' do
@@ -126,7 +126,7 @@ describe 'StickyFlag::Database' do
   describe '.set_database_tag' do
     context 'with an already extant tag' do
       before(:each) do
-        @obj.update_database_from_files example_root
+        @obj.update_database_from_files [example_root]
         @path = example_path 'mmd_with_tag.mmd'
         @obj.set_database_tag(@path, 'asdf')
       end
@@ -151,7 +151,7 @@ describe 'StickyFlag::Database' do
     
     context 'with a new tag' do
       before(:each) do
-        @obj.update_database_from_files example_root
+        @obj.update_database_from_files [example_root]
         @path = example_path 'mmd_with_tag.mmd'
         @obj.set_database_tag(@path, 'zuzzax')
       end
@@ -179,7 +179,7 @@ describe 'StickyFlag::Database' do
   describe '.unset_database_tag' do
     context 'with a multiply-present tag' do
       before(:each) do
-        @obj.update_database_from_files example_root
+        @obj.update_database_from_files [example_root]
         @path = example_path 'mmd_with_tag.mmd'
       end
       
@@ -199,7 +199,7 @@ describe 'StickyFlag::Database' do
     
     context 'with a singly-present tag' do
       before(:each) do
-        @obj.update_database_from_files example_root
+        @obj.update_database_from_files [example_root]
         @path = example_path 'mmd_crazy_tags.mmd'
       end
       
@@ -226,7 +226,7 @@ describe 'StickyFlag::Database' do
   
   describe '.clear_database_tags' do
     before(:each) do
-      @obj.update_database_from_files example_root
+      @obj.update_database_from_files [example_root]
       @path = example_path 'mmd_crazy_tags.mmd'
       @obj.clear_database_tags(@path)
     end
@@ -247,7 +247,7 @@ describe 'StickyFlag::Database' do
   
   describe '.files_for_tags' do
     before(:each) do
-      @obj.update_database_from_files example_root
+      @obj.update_database_from_files [example_root]
     end
     
     context 'with good, single tags' do
@@ -312,7 +312,7 @@ describe 'StickyFlag::Database' do
     
     context 'after loading files into the database' do
       before(:each) do
-        @obj.update_database_from_files example_root
+        @obj.update_database_from_files [example_root]
       end
       
       it 'includes multiply-present tags' do

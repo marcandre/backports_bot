@@ -384,14 +384,14 @@ describe 'StickyFlag' do
     it 'updates in the current directory by default' do
       run_with_args('update') do |sf|
         sf.set_config(:root, '')
-        sf.should_receive(:update_database_from_files).with('.')
+        sf.should_receive(:update_database_from_files).with([ '.' ])
       end
     end
     
     it 'updates from the configured root dir' do
       run_with_args('update') do |sf|
         sf.set_config(:root, '/usr/')
-        sf.should_receive(:update_database_from_files).with('/usr/')
+        sf.should_receive(:update_database_from_files).with([ '/usr/' ])
       end
     end
   end
@@ -400,7 +400,7 @@ describe 'StickyFlag' do
     context 'with --quiet' do
       it 'just prints all the tags, with no padding' do
         run_with_args('tags', '--quiet') do |sf|
-          sf.update_database_from_files example_root
+          sf.update_database_from_files [example_root]
           sf.should_receive(:say).with('asdf').once
           sf.should_receive(:say).with(kind_of(String)).any_number_of_times
         end
@@ -410,7 +410,7 @@ describe 'StickyFlag' do
     context 'without --quiet' do
       it 'prints an intro message and padded tags' do
         run_with_args('tags') do |sf|
-          sf.update_database_from_files example_root
+          sf.update_database_from_files [example_root]
           sf.should_receive(:say).with('Tags currently in use:').once
           sf.should_receive(:say).with(/ ?test/).once
           sf.should_receive(:say).with(kind_of(String)).any_number_of_times
@@ -439,14 +439,14 @@ describe 'StickyFlag' do
     context 'with a missing tag' do
       it 'prints a warning message' do
         run_with_args('find', 'zuzzax') do |sf|
-          sf.update_database_from_files example_root
+          sf.update_database_from_files [example_root]
           sf.should_receive(:say_status).with(:warning, /not present/, :yellow)
         end
       end
       
       it 'prints nothing with --quiet' do
         run_with_args('find', 'zuzzax', '--quiet') do |sf|
-          sf.update_database_from_files example_root
+          sf.update_database_from_files [example_root]
           sf.should_not_receive(:say)
           sf.should_not_receive(:say_status)
         end
@@ -456,14 +456,14 @@ describe 'StickyFlag' do
     context 'with a bad boolean combo' do
       it 'prints a warning message' do
         run_with_args('find', 'test', 'asdf') do |sf|
-          sf.update_database_from_files example_root
+          sf.update_database_from_files [example_root]
           sf.should_receive(:say_status).with(:warning, /not found/, :yellow)
         end
       end
       
       it 'prints nothing with --quiet' do
         run_with_args('find', 'test', 'asdf', '--quiet') do |sf|
-          sf.update_database_from_files example_root
+          sf.update_database_from_files [example_root]
           sf.should_not_receive(:say)
           sf.should_not_receive(:say_status)
         end
@@ -473,7 +473,7 @@ describe 'StickyFlag' do
     context 'with a good tag' do
       it 'prints some filenames' do
         run_with_args('find', 'test') do |sf|
-          sf.update_database_from_files example_root
+          sf.update_database_from_files [example_root]
           sf.should_receive(:say).with(/#{example_root}/).at_least(:once)
         end
       end

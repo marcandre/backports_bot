@@ -61,26 +61,30 @@ module StickyFlag
       file_id
     end
   
-    def update_database_from_files(directory = '.')
+    def update_database_from_files(directories = [ '.' ])
       drop_tables
       create_tables
-    
-      Dir.glob(File.join(directory, '**', "*{#{available_tagging_extensions.join(',')}}")).each do |file|
-        begin
-          tags = get_tags_for file
-        rescue Thor::Error
-          # Just skip this file, then, don't error out entirely
-          say_status :warning, "Could not read tags from '#{file}', despite a valid extension", :yellow
-          next
-        end
-        
-        # Don't record files in the DB that have no tags
-        next if tags.nil? || tags.empty?
       
-        file_id = get_file_id file      
-        tags.each do |tag|
-          tag_id = get_tag_id tag
-          @database[:tagged_files].insert(:file => file_id, :tag => tag_id)
+      directories.each do |directory|   
+        next if directory.empty?
+         
+        Dir.glob(File.join(directory, '**', "*{#{available_tagging_extensions.join(',')}}")).each do |file|
+          begin
+            tags = get_tags_for file
+          rescue Thor::Error
+            # Just skip this file, then, don't error out entirely
+            say_status :warning, "Could not read tags from '#{file}', despite a valid extension", :yellow
+            next
+          end
+        
+          # Don't record files in the DB that have no tags
+          next if tags.nil? || tags.empty?
+      
+          file_id = get_file_id file      
+          tags.each do |tag|
+            tag_id = get_tag_id tag
+            @database[:tagged_files].insert(:file => file_id, :tag => tag_id)
+          end
         end
       end
     end

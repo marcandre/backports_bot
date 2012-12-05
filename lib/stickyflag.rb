@@ -201,8 +201,23 @@ module StickyFlag
       contents.
     LONGDESC
     def update
-      root = get_config(:root).strip
-      root = '.' if root.empty? || root.nil?
+      root = get_config(:root)
+      root ||= '.'
+      unless root.is_a? Array
+        root = [ root ]
+      end
+      
+      root.map! do |r|
+        s = r.strip
+        if s.empty?
+          nil
+        else
+          s
+        end
+      end
+      
+      root.compact!
+      root = [ '.' ] if root.empty?
     
       update_database_from_files root
     end
