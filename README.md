@@ -29,6 +29,7 @@ StickyFlag can currently tag:
 
 ## What else does it need?
 
+* StickyFlag is tested with the standard MRI Ruby interpreter, versions 1.8, 1.9, and 2.0, so you should be safe with any one of those.
 * If you're going to tag PDF files, you need to install [pdftk,](http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) which is available for all platforms (licensed under the GPL).
 * If you're going to tag MKV files, you need to install [mkvtoolnix,](http://www.bunkus.org/videotools/mkvtoolnix/) which is available for all platforms (licensed under the GPL).
 
