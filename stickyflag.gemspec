@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'backports'
+  s.add_runtime_dependency 'yajl-ruby'
   s.add_runtime_dependency 'xdg'
   s.add_runtime_dependency 'open4'
   s.add_runtime_dependency 'nokogiri'
@@ -35,7 +36,6 @@ Gem::Specification.new do |s|
   
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'yajl-ruby'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'fuubar'
   s.add_development_dependency 'cucumber'

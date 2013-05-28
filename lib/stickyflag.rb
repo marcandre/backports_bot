@@ -3,6 +3,7 @@
 require 'rubygems'
 require 'thor'
 require 'backports'
+require 'yajl/json_gem'
 
 require 'stickyflag/version'
 
