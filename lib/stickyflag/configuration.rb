@@ -15,7 +15,7 @@ module StickyFlag
       :have_exiftool => false,
       :exiftool_path => '',
       
-      :root => ''
+      :root => [ '' ]
     }
   
     def get_config(key)
