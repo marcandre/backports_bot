@@ -70,3 +70,5 @@ end
 platforms :jruby do
   gem 'json'
 end
+
+gem 'backports', :git => 'https://github.com/marcandre/backports.git', :branch => 'introspection'
