@@ -7,3 +7,5 @@ group :debugging do
   gem "pry"
   gem "pry-doc"
 end
+
+gem 'backports', :git => 'https://github.com/marcandre/backports.git', :branch => 'introspection'
