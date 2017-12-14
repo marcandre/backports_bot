@@ -1,0 +1,99 @@
+---
+2.0.0/stdlib/ostruct#to_h:
+  ? - /home/travis/.rvm/gems/ruby-1.9.3-p551/bundler/gems/backports-da03bcfc5742/lib/backports/2.0.0/stdlib/ostruct.rb:30:in
+      `to_h'
+    - /home/travis/build/marcandre/backports_bot/lib/fpm/rake_task.rb:30:in `parsed_options'
+    - /home/travis/build/marcandre/backports_bot/lib/fpm/rake_task.rb:53:in `run_cli'
+    - /home/travis/build/marcandre/backports_bot/lib/fpm/rake_task.rb:23:in `block
+      in initialize'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rake-10.5.0/lib/rake/task.rb:240:in
+      `call'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rake-10.5.0/lib/rake/task.rb:240:in
+      `block in execute'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rake-10.5.0/lib/rake/task.rb:235:in
+      `each'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rake-10.5.0/lib/rake/task.rb:235:in
+      `execute'
+    - /home/travis/build/marcandre/backports_bot/spec/fpm/rake_task_spec.rb:60:in
+      `block (4 levels) in <top (required)>'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-expectations-3.0.4/lib/rspec/matchers/built_in/raise_error.rb:42:in
+      `call'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-expectations-3.0.4/lib/rspec/matchers/built_in/raise_error.rb:42:in
+      `matches?'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-expectations-3.0.4/lib/rspec/expectations/handler.rb:48:in
+      `handle_matcher'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-expectations-3.0.4/lib/rspec/expectations/expectation_target.rb:54:in
+      `to'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-expectations-3.0.4/lib/rspec/expectations/expectation_target.rb:87:in
+      `to'
+    - /home/travis/build/marcandre/backports_bot/spec/fpm/rake_task_spec.rb:60:in
+      `block (3 levels) in <top (required)>'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:148:in
+      `instance_exec'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:148:in
+      `block in run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:210:in
+      `call'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:210:in
+      `block (2 levels) in <class:Procsy>'
+    - /home/travis/build/marcandre/backports_bot/spec/fpm/rake_task_spec.rb:11:in
+      `block (2 levels) in <top (required)>'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:294:in
+      `instance_exec'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:294:in
+      `instance_exec'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/hooks.rb:430:in
+      `block (2 levels) in run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:210:in
+      `call'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:210:in
+      `block (2 levels) in <class:Procsy>'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/hooks.rb:428:in
+      `run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/hooks.rb:485:in
+      `run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:303:in
+      `with_around_example_hooks'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example.rb:145:in
+      `run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example_group.rb:494:in
+      `block in run_examples'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example_group.rb:490:in
+      `map'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example_group.rb:490:in
+      `run_examples'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example_group.rb:457:in
+      `run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example_group.rb:458:in
+      `block in run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example_group.rb:458:in
+      `map'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/example_group.rb:458:in
+      `run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/runner.rb:112:in
+      `block (2 levels) in run_specs'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/runner.rb:112:in
+      `map'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/runner.rb:112:in
+      `block in run_specs'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/reporter.rb:54:in
+      `report'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/runner.rb:108:in
+      `run_specs'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/runner.rb:86:in
+      `run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/runner.rb:70:in
+      `run'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/lib/rspec/core/runner.rb:38:in
+      `invoke'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/gems/rspec-core-3.0.4/exe/rspec:4:in
+      `<top (required)>'
+    - !binary |-
+      L2hvbWUvdHJhdmlzLy5ydm0vZ2Vtcy9ydWJ5LTEuOS4zLXA1NTEvYmluL3Jz
+      cGVjOjIzOmluIGBsb2FkJw==
+    - !binary |-
+      L2hvbWUvdHJhdmlzLy5ydm0vZ2Vtcy9ydWJ5LTEuOS4zLXA1NTEvYmluL3Jz
+      cGVjOjIzOmluIGA8bWFpbj4n
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/bin/ruby_executable_hooks:15:in `eval'
+    - /home/travis/.rvm/gems/ruby-1.9.3-p551/bin/ruby_executable_hooks:15:in `<main>'
+  : 1
