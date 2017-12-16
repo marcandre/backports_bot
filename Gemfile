@@ -10,3 +10,5 @@ platforms :rbx do
   gem 'rubysl', '~> 2.0'
   gem 'psych'
 end
+
+gem 'backports', :git => 'https://github.com/marcandre/backports.git', :branch => 'introspection'

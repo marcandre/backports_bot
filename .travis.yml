@@ -1,15 +1,12 @@
+---
 language: ruby
 sudo: required
 dist: trusty
 rvm:
-  - 2.3.3
-  - 2.4.0
-  - jruby-9.1.5.0
-  - rbx-2
-  - jruby-head
+- 2.3.3
 before_install:
-  - gem update bundler
+- gem update bundler
 matrix:
   allow_failures:
-    - rvm: rbx-2
-    - rvm: jruby-head
+  - rvm: rbx-2
+  - rvm: jruby-head
