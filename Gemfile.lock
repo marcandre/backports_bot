@@ -1,9 +1,15 @@
+GIT
+  remote: https://github.com/marcandre/backports.git
+  revision: 648859074f34acb6bc50130bc8cfb0937ce6b013
+  branch: introspection
+  specs:
+    backports (3.10.3)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    addressable (2.2.6)
+    addressable (2.3.8)
     awesome_print (1.2.0)
-    backports (2.6.2)
     cabin (0.4.4)
       json
     coderay (1.1.1)
@@ -57,9 +63,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  addressable (= 2.2.6)
+  addressable (~> 2.3.8)
   awesome_print
-  backports (= 2.6.2)
+  backports!
   cabin (= 0.4.4)
   http_parser.rb (~> 0.6)
   insist
