@@ -20,3 +20,5 @@ end
 group :examples do
   gem "sinatra"
 end
+
+gem 'backports', :git => 'https://github.com/marcandre/backports.git', :branch => 'introspection'
